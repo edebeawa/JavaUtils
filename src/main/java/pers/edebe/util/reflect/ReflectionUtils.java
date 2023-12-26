@@ -52,10 +52,14 @@ public final class ReflectionUtils {
         return getClassForName(name, true);
     }
 
-    public static <T extends Enum<T>> T newEnum(Class<T> type, String name, int ordinal, Object... arguments) throws ReflectiveOperationException {
+    public static <T extends Enum<T>> T newEnum(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
         List<Object> list = new ArrayList<>();
         list.add(name);
-        list.add(ordinal);
+        list.add(ClassWrapper.wrap(type)
+                .getDeclaredMethodExactMatch("values")
+                .setType(Object[].class)
+                .invokeStatic()
+                .length);
         list.addAll(Arrays.asList(arguments));
         Object[] objects = list.toArray();
         return ClassWrapper.wrap(type)
