@@ -8,9 +8,7 @@ import pers.edebe.util.wrapper.ClassWrapper;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @CallerSensitive
 public final class ReflectionUtils {
@@ -52,21 +50,38 @@ public final class ReflectionUtils {
         return getClassForName(name, true);
     }
 
+    private static final Map<Class<? extends Enum<?>>, Map<String, Enum<?>>> ENUMS = new HashMap<>();
+
+    @SuppressWarnings("unchecked")
     public static <T extends Enum<T>> T newEnum(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
-        List<Object> list = new ArrayList<>();
-        list.add(name);
-        list.add(ClassWrapper.wrap(type)
-                .getDeclaredMethodExactMatch("values")
-                .setType(Object[].class)
-                .invokeStatic()
-                .length);
-        list.addAll(Arrays.asList(arguments));
-        Object[] objects = list.toArray();
-        return ClassWrapper.wrap(type)
-                .getDeclaredConstructorNoRestrictFuzzyMatch(ClassUtils.getClass(objects))
-                .setAccessibleNoRestrict(true)
-                .setType(type)
-                .newInstanceNoRestrict(objects);
+        Map<String, Enum<?>> map;
+        if (ENUMS.containsKey(type)) {
+            map = ENUMS.get(type);
+        } else {
+            map = new HashMap<>();
+            Arrays.stream(ClassWrapper.wrap(type)
+                    .getDeclaredMethodExactMatch("values")
+                    .setType(Enum[].class)
+                    .invokeStatic()).forEach((value) -> map.put(value.name(), value));
+            ENUMS.put(type, map);
+        }
+
+        if (map.containsKey(name)) {
+            return (T) map.get(name);
+        } else {
+            List<Object> list = new ArrayList<>();
+            list.add(name);
+            list.add(map.size());
+            list.addAll(Arrays.asList(arguments));
+            Object[] objects = list.toArray();
+            T value = ClassWrapper.wrap(type)
+                    .getDeclaredConstructorNoRestrictFuzzyMatch(ClassUtils.getClass(objects))
+                    .setAccessibleNoRestrict(true)
+                    .setType(type)
+                    .newInstanceNoRestrict(objects);
+            map.put(name, value);
+            return value;
+        }
     }
 
     @Nullable
