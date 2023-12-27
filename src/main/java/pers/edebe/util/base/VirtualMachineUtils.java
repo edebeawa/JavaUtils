@@ -29,7 +29,7 @@ public class VirtualMachineUtils {
     }
 
     public static void loadAgentLibrary(Class<?> clazz, Object instance, String agent) throws ReflectiveOperationException {
-        loadAgentPath(clazz, instance, agent, null);
+        loadAgentLibrary(clazz, instance, agent, null);
     }
 
     public static void loadAgentPath(Class<?> clazz, Object instance, String agent, @Nullable String argument) throws ReflectiveOperationException {
