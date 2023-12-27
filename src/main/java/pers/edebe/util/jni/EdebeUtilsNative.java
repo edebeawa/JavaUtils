@@ -2,7 +2,6 @@ package pers.edebe.util.jni;
 
 import pers.edebe.util.base.ClassUtils;
 import pers.edebe.util.base.FileType;
-import pers.edebe.util.base.SystemUtils;
 import pers.edebe.util.io.StreamUtils;
 
 import java.io.File;
@@ -34,7 +33,7 @@ class EdebeUtilsNative {
                 } else {
                     file = path.toFile();
                 }
-                SystemUtils.load(file);
+                System.load(file.getAbsolutePath());
             } catch (IOException e) {
                 throwException = true;
             }
