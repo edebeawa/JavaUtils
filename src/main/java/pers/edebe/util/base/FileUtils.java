@@ -5,9 +5,12 @@ import pers.edebe.util.io.StreamUtils;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -72,5 +75,25 @@ public final class FileUtils {
 
     public static boolean isFileTypeEquals(Path path, String suffix, byte[] magic) {
         return isFileTypeEquals(path.toFile(), suffix, magic);
+    }
+
+    public static File findLibFile(URL url, BiFunction<Path, String, File> function) throws IOException {
+        Path path = ClassUtils.getPath(url);
+        File file;
+        if (FileType.JAR.isThisFileType(path)) {
+            String filepath = path.toString();
+            int index = filepath.lastIndexOf(File.separator);
+            path = Path.of(filepath.substring(0, index));
+            file = function.apply(path, filepath.substring(index + 1));
+            Files.createDirectories(path);
+            if (!file.exists() && file.createNewFile()) {
+                try (InputStream inputStream = url.openStream(); FileOutputStream outputStream = new FileOutputStream(file)) {
+                    outputStream.write(StreamUtils.toByteArray(inputStream));
+                }
+            }
+        } else {
+            file = path.toFile();
+        }
+        return file;
     }
 }
