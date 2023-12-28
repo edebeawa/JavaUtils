@@ -86,9 +86,13 @@ public final class FileUtils {
             path = Path.of(filepath.substring(0, index));
             file = function.apply(path, filepath.substring(index + 1));
             Files.createDirectories(path);
-            if (!file.exists() && file.createNewFile()) {
-                try (InputStream inputStream = url.openStream(); FileOutputStream outputStream = new FileOutputStream(file)) {
-                    outputStream.write(StreamUtils.toByteArray(inputStream));
+            if (!file.exists()) {
+                if (file.createNewFile()) {
+                    try (InputStream inputStream = url.openStream(); FileOutputStream outputStream = new FileOutputStream(file)) {
+                        outputStream.write(StreamUtils.toByteArray(inputStream));
+                    }
+                } else {
+                    return null;
                 }
             }
         } else {
