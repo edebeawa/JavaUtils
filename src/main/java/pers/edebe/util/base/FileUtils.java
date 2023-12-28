@@ -92,7 +92,7 @@ public final class FileUtils {
                         outputStream.write(StreamUtils.toByteArray(inputStream));
                     }
                 } else {
-                    return null;
+                    throw new FileNotFoundException();
                 }
             }
         } else {
