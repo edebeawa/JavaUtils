@@ -63,39 +63,6 @@ public final class ReflectionUtils {
                 .newInstanceNoRestrict(objects);
     }
 
-    private static Enum<?>[] getValues(Class<?> type) throws ReflectiveOperationException {
-        return ClassWrapper.wrap(type)
-                .getDeclaredMethodExactMatch("values")
-                .setType(Enum[].class)
-                .invokeStatic();
-    }
-
-    public static <T extends Enum<T>> T newEnumLocal(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
-        return newEnum(type, name, getValues(type).length, arguments);
-    }
-
-    private static final Map<Class<? extends Enum<?>>, Map<String, Enum<?>>> ENUMS = new HashMap<>();
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Enum<T>> T newEnumGlobal(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
-        Map<String, Enum<?>> map;
-        if (ENUMS.containsKey(type)) {
-            map = ENUMS.get(type);
-        } else {
-            map = new HashMap<>();
-            Arrays.stream(getValues(type)).forEach((value) -> map.put(value.name(), value));
-            ENUMS.put(type, map);
-        }
-
-        if (map.containsKey(name)) {
-            return (T) map.get(name);
-        } else {
-            T value = newEnum(type, name, map.size(), arguments);
-            map.put(name, value);
-            return value;
-        }
-    }
-
     @Nullable
     public static Class<?> getCallerClass(int depth) {
         try {
