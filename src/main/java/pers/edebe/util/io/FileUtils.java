@@ -1,16 +1,14 @@
-package pers.edebe.util.base;
+package pers.edebe.util.io;
 
-import pers.edebe.util.io.StreamUtils;
+import pers.edebe.util.base.ClassUtils;
+import pers.edebe.util.base.StringUtils;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -78,7 +76,7 @@ public final class FileUtils {
     }
 
     public static File findLibFile(URL url, BiFunction<Path, String, File> function) throws IOException {
-        Path path = ClassUtils.getPath(url);
+        Path path = PathUtils.getPath(url);
         File file;
         if (FileType.JAR.isThisFileType(path)) {
             String filepath = path.toString();

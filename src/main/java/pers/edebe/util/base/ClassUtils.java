@@ -1,5 +1,7 @@
 package pers.edebe.util.base;
 
+import pers.edebe.util.io.PathUtils;
+
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -28,35 +30,10 @@ public final class ClassUtils {
         return classname.replace('.', '/');
     }
 
-    public static Path getPath(URL resource, Charset charset) {
-        String path = URLDecoder.decode(resource.getPath(), charset);
-        if (path.startsWith("file:")) {
-            path = path.substring("file:".length());
-        }
-        if (path.contains("!")) {
-            path = path.substring(0, path.indexOf("!"));
-        }
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-        if (path.contains("#")) {
-            path = path.substring(0, path.lastIndexOf("#"));
-        }
-        return Path.of(path);
-    }
-
-    public static Path getPath(URL resource, String charsetName) {
-        return getPath(resource, Charset.forName(charsetName));
-    }
-
-    public static Path getPath(URL resource) {
-        return getPath(resource, Charset.defaultCharset());
-    }
-
     public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws FileNotFoundException {
         URL resource = classloader.getResource(classname.replace('.', '/') + ".class");
         if (resource != null) {
-            return getPath(resource, charset);
+            return PathUtils.getPath(resource, charset);
         } else {
             throw new FileNotFoundException();
         }

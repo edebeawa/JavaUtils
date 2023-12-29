@@ -1,4 +1,4 @@
-package pers.edebe.util.base;
+package pers.edebe.util.io;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

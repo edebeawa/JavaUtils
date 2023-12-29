@@ -1,6 +1,6 @@
 package pers.edebe.util.jni;
 
-import pers.edebe.util.base.FileUtils;
+import pers.edebe.util.io.FileUtils;
 
 import java.io.IOException;
 import java.net.URL;
