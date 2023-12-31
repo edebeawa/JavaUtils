@@ -1,6 +1,6 @@
 package pers.edebe.util.wrapper;
 
-import pers.edebe.util.reflect.AccessUtils;
+import pers.edebe.util.reflect.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ public class MethodWrapper<T> extends AccessibleObjectWrapper<Method, MethodWrap
 
     static {
         try {
-            NATIVE_METHOD_ACCESSOR_IMPL_INVOKE_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.forName("jdk.internal.reflect.NativeMethodAccessorImpl"), "invoke0", Method.class, Object.class, Object[].class);
+            NATIVE_METHOD_ACCESSOR_IMPL_INVOKE_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.forName("jdk.internal.reflect.NativeMethodAccessorImpl"), "invoke0", Method.class, Object.class, Object[].class);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }

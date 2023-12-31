@@ -3,7 +3,7 @@ package pers.edebe.util.wrapper;
 import lombok.Getter;
 import pers.edebe.util.base.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
-import pers.edebe.util.reflect.AccessUtils;
+import pers.edebe.util.reflect.ReflectionUtils;
 
 import java.lang.reflect.AccessibleObject;
 
@@ -49,6 +49,6 @@ public abstract class AccessibleObjectInfo<T extends AccessibleObject> extends A
 
     @SuppressWarnings("unchecked")
     public T newInstance() throws ReflectiveOperationException {
-        return (T) ConstructorWrapper.wrap(AccessUtils.getAccessibleDeclaredConstructor(objectType, getArgTypes())).newInstanceNoRestrict(getArgs());
+        return (T) ConstructorWrapper.wrap(ReflectionUtils.getAccessibleDeclaredConstructor(objectType, getArgTypes())).newInstanceNoRestrict(getArgs());
     }
 }

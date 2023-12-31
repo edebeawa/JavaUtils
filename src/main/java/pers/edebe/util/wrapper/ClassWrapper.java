@@ -1,7 +1,6 @@
 package pers.edebe.util.wrapper;
 
 import pers.edebe.util.base.ArrayUtils;
-import pers.edebe.util.reflect.AccessUtils;
 import pers.edebe.util.misc.UnsafeUtils;
 import pers.edebe.util.reflect.ReflectionUtils;
 
@@ -20,11 +19,11 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
 
     static {
         try {
-            REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD = AccessUtils.getAccessibleDeclaredMethod(ReflectionUtils.REFLECTION_FACTORY_CLASS, "getExecutableSharedParameterTypes", Executable.class);
-            CLASS_GET_DECLARED_FIELDS_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredFields0", boolean.class);
-            CLASS_GET_DECLARED_METHODS_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredMethods0", boolean.class);
-            CLASS_GET_DECLARED_CONSTRUCTORS_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredConstructors0", boolean.class);
-            CLASS_GET_DECLARED_CLASSES_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredClasses0");
+            REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(ReflectionUtils.REFLECTION_FACTORY_CLASS, "getExecutableSharedParameterTypes", Executable.class);
+            CLASS_GET_DECLARED_FIELDS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredFields0", boolean.class);
+            CLASS_GET_DECLARED_METHODS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredMethods0", boolean.class);
+            CLASS_GET_DECLARED_CONSTRUCTORS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredConstructors0", boolean.class);
+            CLASS_GET_DECLARED_CLASSES_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredClasses0");
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

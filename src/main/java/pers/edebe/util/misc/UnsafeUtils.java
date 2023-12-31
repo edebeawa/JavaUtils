@@ -1,6 +1,6 @@
 package pers.edebe.util.misc;
 
-import pers.edebe.util.reflect.AccessUtils;
+import pers.edebe.util.reflect.ReflectionUtils;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
@@ -27,11 +27,11 @@ public final class UnsafeUtils {
             //noinspection StatementWithEmptyBody
             for (offset = 0; UNSAFE_INSTANCE.getBoolean(field0, offset) == UNSAFE_INSTANCE.getBoolean(field1, offset); offset++);
             ACCESS_MODIFIER_OFFSET = offset;
-            INTERNAL_UNSAFE_INSTANCE = AccessUtils.getAccessibleDeclaredField(Unsafe.class, "theInternalUnsafe").get(null);
+            INTERNAL_UNSAFE_INSTANCE = ReflectionUtils.getAccessibleDeclaredField(Unsafe.class, "theInternalUnsafe").get(null);
             INTERNAL_UNSAFE_CLASS = INTERNAL_UNSAFE_INSTANCE.getClass();
-            INTERNAL_UNSAFE_DEFINE_CLASS_METHOD = AccessUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "defineClass", String.class, byte[].class, int.class, int.class, ClassLoader.class, ProtectionDomain.class);
-            INTERNAL_UNSAFE_GET_REFERENCE_METHOD = AccessUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "getReference", Object.class, long.class);
-            INTERNAL_UNSAFE_PUT_REFERENCE_METHOD = AccessUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "putReference", Object.class, long.class, Object.class);
+            INTERNAL_UNSAFE_DEFINE_CLASS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "defineClass", String.class, byte[].class, int.class, int.class, ClassLoader.class, ProtectionDomain.class);
+            INTERNAL_UNSAFE_GET_REFERENCE_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "getReference", Object.class, long.class);
+            INTERNAL_UNSAFE_PUT_REFERENCE_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(INTERNAL_UNSAFE_CLASS, "putReference", Object.class, long.class, Object.class);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }

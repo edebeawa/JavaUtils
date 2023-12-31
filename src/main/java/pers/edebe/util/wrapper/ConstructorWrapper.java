@@ -1,6 +1,6 @@
 package pers.edebe.util.wrapper;
 
-import pers.edebe.util.reflect.AccessUtils;
+import pers.edebe.util.reflect.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -11,7 +11,7 @@ public class ConstructorWrapper<T> extends AccessibleObjectWrapper<Constructor<?
 
     static {
         try {
-            NATIVE_CONSTRUCTOR_ACCESSOR_IMPL_NEW_INSTANCE_METHOD = AccessUtils.getAccessibleDeclaredMethod(Class.forName("jdk.internal.reflect.NativeConstructorAccessorImpl"), "newInstance0", Constructor.class, Object[].class);
+            NATIVE_CONSTRUCTOR_ACCESSOR_IMPL_NEW_INSTANCE_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.forName("jdk.internal.reflect.NativeConstructorAccessorImpl"), "newInstance0", Constructor.class, Object[].class);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
