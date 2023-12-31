@@ -1,4 +1,4 @@
-package pers.edebe.util.base;
+package pers.edebe.util.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
