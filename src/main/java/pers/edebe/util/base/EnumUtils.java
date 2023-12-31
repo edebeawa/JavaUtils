@@ -22,7 +22,7 @@ public class EnumUtils {
 
     private static final Map<Class<? extends Enum<?>>, Map<String, Enum<?>>> ENUMS = new HashMap<>();
 
-    public static <T extends Enum<T>> Map<String, Enum<?>> getGlobalEnumMap(Class<T> type) {
+    public static Map<String, Enum<?>> getGlobalEnumMap(Class<? extends Enum<?>> type) {
         return ENUMS.getOrDefault(type, ENUMS.put(type, new HashMap<>()));
     }
 
