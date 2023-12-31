@@ -13,19 +13,4 @@ dependencies {
     compileOnly "org.jetbrains:annotations:${annotations_version}"
     compileOnly "org.projectlombok:lombok:${lombok_version}"
     annotationProcessor "org.projectlombok:lombok:${lombok_version}"
-
-    implementation "org.ow2.asm:asm:${asm_version}"
-    implementation "org.ow2.asm:asm-analysis:${asm_version}"
-    implementation "org.ow2.asm:asm-commons:${asm_version}"
-    implementation "org.ow2.asm:asm-tree:${asm_version}"
-    implementation "org.ow2.asm:asm-util:${asm_version}"
-}
-
-jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        (configurations.runtimeClasspath).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
 }
