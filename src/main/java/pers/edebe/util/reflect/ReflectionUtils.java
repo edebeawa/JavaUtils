@@ -88,10 +88,18 @@ public final class ReflectionUtils {
         return getClassForName(name, true);
     }
 
-    public static <T extends Enum<T>> T newEnum(Class<T> type, String name, int ordinal, Object... arguments) throws ReflectiveOperationException {
+    public static Enum<?>[] getValues(Class<?> type) throws ReflectiveOperationException {
+        return ClassWrapper.wrap(type)
+                .getDeclaredField("$VALUES")
+                .setAccessible(true)
+                .setType(Enum[].class)
+                .getStatic();
+    }
+
+    public static <T extends Enum<T>> T newLocalEnum(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
         List<Object> list = new ArrayList<>();
         list.add(name);
-        list.add(ordinal);
+        list.add(getValues(type).length);
         list.addAll(Arrays.asList(arguments));
         Object[] objects = list.toArray();
         return ClassWrapper.wrap(type)
