@@ -36,42 +36,32 @@ public final class FileUtils {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static boolean isFileHeaderEquals(InputStream stream, byte[] magic) {
-        try {
-            int length = magic.length;
-            byte[] buffer = new byte[length];
-            stream.read(buffer, 0, length);
-            return Arrays.equals(buffer, magic);
-        } catch (IOException e) {
-            return false;
-        }
+    public static boolean isFileHeaderEquals(InputStream stream, byte[] magic) throws IOException {
+        int length = magic.length;
+        byte[] buffer = new byte[length];
+        stream.read(buffer, 0, length);
+        return Arrays.equals(buffer, magic);
     }
 
-    public static boolean isFileHeaderEquals(File file, byte[] magic) {
+    public static boolean isFileHeaderEquals(File file, byte[] magic) throws IOException {
         try (FileInputStream stream = new FileInputStream(file)) {
             return isFileHeaderEquals(stream, magic);
-        } catch (IOException e) {
-            return false;
         }
     }
 
-    public static boolean isFileHeaderEquals(Path path, byte[] magic) {
+    public static boolean isFileHeaderEquals(Path path, byte[] magic) throws IOException {
         return isFileHeaderEquals(path.toFile(), magic);
     }
 
-    public static boolean isFileTypeEquals(ZipFile file, ZipEntry entry, String suffix, byte[] magic) {
-        try {
-            return !entry.isDirectory() && isFileSuffixEquals(entry.getName(), suffix) && isFileHeaderEquals(file.getInputStream(entry), magic);
-        } catch (IOException e) {
-            return false;
-        }
+    public static boolean isFileTypeEquals(ZipFile file, ZipEntry entry, String suffix, byte[] magic) throws IOException {
+        return !entry.isDirectory() && isFileSuffixEquals(entry.getName(), suffix) && isFileHeaderEquals(file.getInputStream(entry), magic);
     }
 
-    public static boolean isFileTypeEquals(File file, String suffix, byte[] magic) {
+    public static boolean isFileTypeEquals(File file, String suffix, byte[] magic) throws IOException {
         return !file.isDirectory() && isFileSuffixEquals(file, suffix) && isFileHeaderEquals(file, magic);
     }
 
-    public static boolean isFileTypeEquals(Path path, String suffix, byte[] magic) {
+    public static boolean isFileTypeEquals(Path path, String suffix, byte[] magic) throws IOException {
         return isFileTypeEquals(path.toFile(), suffix, magic);
     }
 

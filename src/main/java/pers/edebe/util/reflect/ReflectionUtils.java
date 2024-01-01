@@ -6,10 +6,7 @@ import pers.edebe.util.misc.UnsafeUtils;
 import pers.edebe.util.wrapper.AccessibleObjectWrapper;
 import pers.edebe.util.wrapper.ClassWrapper;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 @CallerSensitive
@@ -110,30 +107,23 @@ public final class ReflectionUtils {
     }
 
     @Nullable
-    public static Class<?> getCallerClass(int depth) {
-        try {
-            Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
-            if (depth > 0 && depth < classes.length) {
-                return classes[depth];
-            }
-        } catch (ReflectiveOperationException e) {
-            //no op
+    public static Class<?> getCallerClass(int depth) throws ReflectiveOperationException {
+        Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
+        if (depth > 0 && depth < classes.length) {
+            return classes[depth];
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Nullable
-    public static Class<?> getCallerClass() {
-        try {
-            Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
-            for (Class<?> clazz : classes) {
-                Class<?> superclass = clazz.getSuperclass();
-                if (!(clazz.isAnnotationPresent(CallerSensitive.class) || (superclass != null && superclass.equals(AccessibleObjectWrapper.class)))) {
-                    return clazz;
-                }
+    public static Class<?> getCallerClass() throws ReflectiveOperationException {
+        Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
+        for (Class<?> clazz : classes) {
+            Class<?> superclass = clazz.getSuperclass();
+            if (!(clazz.isAnnotationPresent(CallerSensitive.class) || (superclass != null && superclass.equals(AccessibleObjectWrapper.class)))) {
+                return clazz;
             }
-        } catch (ReflectiveOperationException e) {
-            //no op
         }
         return null;
     }

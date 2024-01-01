@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
@@ -44,27 +45,27 @@ public enum FileType {
         return FileUtils.isFileSuffixEquals(path, name());
     }
 
-    public boolean isThisFileHeader(InputStream stream) {
+    public boolean isThisFileHeader(InputStream stream) throws IOException {
         return FileUtils.isFileHeaderEquals(stream, getBytes());
     }
 
-    public boolean isThisFileHeader(File file) {
+    public boolean isThisFileHeader(File file) throws IOException {
         return FileUtils.isFileHeaderEquals(file, getBytes());
     }
 
-    public boolean isThisFileHeader(Path path) {
+    public boolean isThisFileHeader(Path path) throws IOException {
         return FileUtils.isFileHeaderEquals(path, getBytes());
     }
 
-    public boolean isThisFileType(ZipFile file, ZipEntry entry) {
+    public boolean isThisFileType(ZipFile file, ZipEntry entry) throws IOException {
         return FileUtils.isFileTypeEquals(file, entry, name(), getBytes());
     }
 
-    public boolean isThisFileType(File file) {
+    public boolean isThisFileType(File file) throws IOException {
         return FileUtils.isFileTypeEquals(file, name(), getBytes());
     }
 
-    public boolean isThisFileType(Path path) {
+    public boolean isThisFileType(Path path) throws IOException {
         return FileUtils.isFileTypeEquals(path, name(), getBytes());
     }
 }
