@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'pers.edebe.util'
-version '2.0.0-SNAPSHOT'
+version '3.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
