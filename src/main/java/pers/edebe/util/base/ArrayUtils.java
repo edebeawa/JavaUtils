@@ -2,12 +2,11 @@ package pers.edebe.util.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import pers.edebe.util.collect.BidirectionalHashMap;
+import pers.edebe.util.collect.ImmutableMap;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -128,18 +127,29 @@ public final class ArrayUtils {
         return equals(array0, array1, Object::equals);
     }
 
+    private static final Map<Class<?>, Class<?>> MAP = Map.of(
+            Void.TYPE,
+            Void.class,
+            Boolean.TYPE,
+            Boolean.class,
+            Byte.TYPE,
+            Byte.class,
+            Character.TYPE,
+            Character.class,
+            Double.TYPE,
+            Double.class,
+            Float.TYPE,
+            Float.class,
+            Integer.TYPE,
+            Integer.class,
+            Long.TYPE,
+            Long.class,
+            Short.TYPE,
+            Short.class
+    );
+
     private static boolean equals(Class<?> class0, Class<?> class1, boolean fuzzy) {
-        Class<?> c0 = class0;
-        Class<?> c1 = class1;
-        if (fuzzy) {
-            if (TypeMap.isPrimitiveClass(c0)) {
-                c0 = TypeMap.getWrapClass(c0);
-            }
-            if (TypeMap.isPrimitiveClass(c1)) {
-                c1 = TypeMap.getWrapClass(c1);
-            }
-        }
-        return c0.equals(c1);
+        return (fuzzy && MAP.containsKey(class0) ? MAP.get(class0) : class0).equals(fuzzy && MAP.containsKey(class1) ? MAP.get(class1) : class1);
     }
 
     public static boolean equals(Class<?>[] array0, Class<?>[] array1, boolean fuzzy) {
