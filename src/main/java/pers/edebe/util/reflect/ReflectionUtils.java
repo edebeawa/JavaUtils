@@ -13,6 +13,7 @@ import java.util.*;
 public final class ReflectionUtils {
     public static final Object REFLECTION_FACTORY_INSTANCE;
     public static final Class<?> REFLECTION_FACTORY_CLASS;
+    private static final long CLASS_OFFSET = 8;
     private static final Method CLASS_FOR_NAME_METHOD;
     private static final Method SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD;
 
@@ -27,7 +28,19 @@ public final class ReflectionUtils {
         }
     }
 
-    //write directly into override to bypass perms
+    private static final Map<Class<?>, Object> OBJECTS = new HashMap<>();
+
+    @SuppressWarnings("unchecked")
+    public static <T> T castNoCheck(Class<T> type, Object object) throws InstantiationException {
+        return castNoCheck((T) OBJECTS.getOrDefault(type, OBJECTS.put(type, UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(type))), object);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T castNoCheck(T type, Object object) {
+        UnsafeUtils.UNSAFE_INSTANCE.putInt(object, CLASS_OFFSET, UnsafeUtils.UNSAFE_INSTANCE.getInt(type, CLASS_OFFSET));
+        return (T) object;
+    }
+
     public static void setAccessibleNoRestrict(AccessibleObject object, boolean flag) {
         UnsafeUtils.UNSAFE_INSTANCE.putBoolean(object, UnsafeUtils.ACCESS_MODIFIER_OFFSET, flag);
     }
