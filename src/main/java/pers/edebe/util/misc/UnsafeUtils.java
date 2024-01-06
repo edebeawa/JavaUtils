@@ -18,14 +18,13 @@ public final class UnsafeUtils {
 
     static {
         try {
-            int offset;//override boolean byte offset.
             Field field0 = Unsafe.class.getDeclaredField("theUnsafe");
             Field field1 = Unsafe.class.getDeclaredField("theUnsafe");
             field0.setAccessible(true);
             field1.setAccessible(false);
             UNSAFE_INSTANCE = (Unsafe) field0.get(null);
-            //noinspection StatementWithEmptyBody
-            for (offset = 0; UNSAFE_INSTANCE.getBoolean(field0, offset) == UNSAFE_INSTANCE.getBoolean(field1, offset); offset++);
+            int offset = 0;//override boolean byte offset.
+            while (UNSAFE_INSTANCE.getBoolean(field0, offset) == UNSAFE_INSTANCE.getBoolean(field1, offset)) offset++;
             ACCESS_MODIFIER_OFFSET = offset;
             INTERNAL_UNSAFE_INSTANCE = ReflectionUtils.getAccessibleDeclaredField(Unsafe.class, "theInternalUnsafe").get(null);
             INTERNAL_UNSAFE_CLASS = INTERNAL_UNSAFE_INSTANCE.getClass();

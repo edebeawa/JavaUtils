@@ -1,6 +1,10 @@
 package pers.edebe.util.jni;
 
 public class NativeReflectionUtils extends EdebeUtilsNative {
+    public static native Class<?> defineClass(String name, ClassLoader loader, byte[] data, int offset, int length);
+
+    public static native Class<?> findClass(String name);
+
     public static native Object getObjectField(Class<?> clazz, Object object, String name, String signature);
 
     public static native boolean getBooleanField(Class<?> clazz, Object object, String name, String signature);

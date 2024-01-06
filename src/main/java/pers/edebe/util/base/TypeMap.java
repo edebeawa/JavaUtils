@@ -3,17 +3,6 @@ package pers.edebe.util.base;
 import java.util.List;
 
 public final class TypeMap {
-    private static final List<Class<?>> WRAP_CLASSES = List.of(
-            Void.class,
-            Boolean.class,
-            Byte.class,
-            Character.class,
-            Double.class,
-            Float.class,
-            Integer.class,
-            Long.class,
-            Short.class
-    );
     private static final List<Class<?>> PRIMITIVE_CLASSES = List.of(
             Void.TYPE,
             Boolean.TYPE,
@@ -24,6 +13,17 @@ public final class TypeMap {
             Integer.TYPE,
             Long.TYPE,
             Short.TYPE
+    );
+    private static final List<Class<?>> WRAP_CLASSES = List.of(
+            Void.class,
+            Boolean.class,
+            Byte.class,
+            Character.class,
+            Double.class,
+            Float.class,
+            Integer.class,
+            Long.class,
+            Short.class
     );
 
     public static boolean isPrimitiveClass(Class<?> clazz) {

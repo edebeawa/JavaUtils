@@ -1,6 +1,5 @@
 package pers.edebe.util.wrapper;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.lang.reflect.Constructor;

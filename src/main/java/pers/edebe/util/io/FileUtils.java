@@ -1,12 +1,13 @@
 package pers.edebe.util.io;
 
-import pers.edebe.util.base.ClassUtils;
 import pers.edebe.util.base.StringUtils;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.zip.ZipEntry;
@@ -65,7 +66,39 @@ public final class FileUtils {
         return isFileTypeEquals(path.toFile(), suffix, magic);
     }
 
-    public static File findLibFile(URL url, BiFunction<Path, String, File> function) throws IOException {
+    public static boolean isFileMessageDigestEquals(byte[] bytes0, byte[] bytes1, MessageDigest digest) {
+        return Arrays.equals(digest.digest(bytes0), digest.digest(bytes1));
+    }
+
+    public static boolean isFileMessageDigestEquals(byte[] bytes0, byte[] bytes1, String digest) throws NoSuchAlgorithmException {
+        return isFileMessageDigestEquals(bytes0, bytes1, MessageDigest.getInstance(digest));
+    }
+
+    public static boolean isFileMessageDigestEquals(InputStream stream0, InputStream stream1, MessageDigest digest) throws IOException {
+        return isFileMessageDigestEquals(StreamUtils.toByteArray(stream0), StreamUtils.toByteArray(stream1), digest);
+    }
+
+    public static boolean isFileMessageDigestEquals(InputStream stream0, InputStream stream1, String digest) throws IOException, NoSuchAlgorithmException {
+        return isFileMessageDigestEquals(stream0, stream1, MessageDigest.getInstance(digest));
+    }
+
+    public static boolean isFileMessageDigestEquals(File file0, File file1, MessageDigest digest) throws IOException {
+        return isFileMessageDigestEquals(new FileInputStream(file0), new FileInputStream(file1), digest);
+    }
+
+    public static boolean isFileMessageDigestEquals(File file0, File file1, String digest) throws IOException, NoSuchAlgorithmException {
+        return isFileMessageDigestEquals(file0, file1, MessageDigest.getInstance(digest));
+    }
+
+    public static boolean isFileMessageDigestEquals(Path path0, Path path1, MessageDigest digest) throws IOException {
+        return isFileMessageDigestEquals(path0.toFile(), path1.toFile(), digest);
+    }
+
+    public static boolean isFileMessageDigestEquals(Path path0, Path path1, String digest) throws IOException, NoSuchAlgorithmException {
+        return isFileMessageDigestEquals(path0, path1, MessageDigest.getInstance(digest));
+    }
+
+    public static File findFile(URL url, BiFunction<Path, String, File> function) throws IOException {
         Path path = PathUtils.getPath(url);
         File file;
         if (FileType.JAR.isThisFileType(path)) {
@@ -74,14 +107,26 @@ public final class FileUtils {
             path = Path.of(filepath.substring(0, index));
             file = function.apply(path, filepath.substring(index + 1));
             Files.createDirectories(path);
-            if (!file.exists()) {
-                if (file.createNewFile()) {
-                    try (InputStream inputStream = url.openStream(); FileOutputStream outputStream = new FileOutputStream(file)) {
-                        outputStream.write(StreamUtils.toByteArray(inputStream));
+            try (InputStream inputStream = url.openStream()) {
+                boolean write = false;
+                if (file.exists()) {
+                    if (!isFileMessageDigestEquals(inputStream, new FileInputStream(file), "MD5")) {
+                        write = true;
                     }
                 } else {
-                    throw new FileNotFoundException();
+                    if (file.createNewFile()) {
+                        write = true;
+                    } else {
+                        throw new FileNotFoundException();
+                    }
                 }
+                if (write) {
+                    try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                        outputStream.write(StreamUtils.toByteArray(inputStream));
+                    }
+                }
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException(e);
             }
         } else {
             file = path.toFile();

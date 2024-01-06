@@ -11,7 +11,7 @@ class EdebeUtilsNative {
         URL url = EdebeUtilsNative.class.getResource("/lib/libEdebeUtils.dll");
         if (url != null) {
             try {
-                System.load(FileUtils.findLibFile(url, (dir, name) ->
+                System.load(FileUtils.findFile(url, (dir, name) ->
                         dir.resolve(name.substring(0, name.lastIndexOf("."))).resolve("libEdebeUtils.dll").toFile()
                 ).getAbsolutePath());
             } catch (IOException e) {
@@ -23,5 +23,8 @@ class EdebeUtilsNative {
         if (throwException) {
             throw new RuntimeException("Unable to load native method");
         }
+        initialize();
     }
+
+    private static native void initialize();
 }

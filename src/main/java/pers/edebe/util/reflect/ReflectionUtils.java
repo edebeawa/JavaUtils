@@ -120,8 +120,7 @@ public final class ReflectionUtils {
     public static Class<?> getCallerClass() throws ReflectiveOperationException {
         Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
         for (Class<?> clazz : classes) {
-            Class<?> superclass = clazz.getSuperclass();
-            if (!(clazz.isAnnotationPresent(CallerSensitive.class) || (superclass != null && superclass.equals(AccessibleObjectWrapper.class)))) {
+            if (!(clazz.isAnnotationPresent(CallerSensitive.class) || AccessibleObjectWrapper.class.isAssignableFrom(clazz))) {
                 return clazz;
             }
         }

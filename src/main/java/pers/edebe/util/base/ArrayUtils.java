@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Stack;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public final class ArrayUtils {
     public static Object[] toArray(Object object) {
@@ -94,6 +93,13 @@ public final class ArrayUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T[] cast(Object[] objects, Class<T> type, int length) {
+        T[] array = (T[]) Array.newInstance(type, length);
+        for (int i = 0; i < length; i++) array[i] = (T) objects[i];
+        return array;
+    }
+
     public static <T> T[] transform(T[] array, Consumer<List<T>> consumer) {
         List<T> list = new ArrayList<>(Arrays.stream(array).toList());
         consumer.accept(list);
@@ -104,21 +110,17 @@ public final class ArrayUtils {
         if (array0 == null) {
             return array1 == null || array1.length == 0;
         }
-
         if (array1 == null) {
             return array0.length == 0;
         }
-
         if (array0.length != array1.length) {
             return false;
         }
-
         for (int i = 0; i < array0.length; i++) {
             if (!function.apply(array0[i], array1[i])) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -141,6 +143,6 @@ public final class ArrayUtils {
     }
 
     public static boolean equals(Class<?>[] array0, Class<?>[] array1, boolean fuzzy) {
-        return ArrayUtils.equals(array0, array1, (class0, class1) -> equals(class0, class1, fuzzy));
+        return equals(array0, array1, (class0, class1) -> equals(class0, class1, fuzzy));
     }
 }
