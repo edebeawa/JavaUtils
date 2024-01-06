@@ -358,6 +358,14 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         return wrap(searchClass(name, false, true));
     }
 
+    public T cast(Object object) {
+        return getObject().cast(object);
+    }
+
+    public T castNoRestrict(Object object) throws InstantiationException {
+        return ReflectionUtils.castNoRestrict(getObject(), object);
+    }
+
     @SuppressWarnings("unchecked")
     public T allocateInstance() throws InstantiationException {
         return (T) UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(getObject());

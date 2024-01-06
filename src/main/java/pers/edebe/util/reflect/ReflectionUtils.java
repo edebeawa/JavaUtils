@@ -2,10 +2,14 @@ package pers.edebe.util.reflect;
 
 import org.jetbrains.annotations.Nullable;
 import pers.edebe.util.base.ClassUtils;
+import pers.edebe.util.base.ThrowableUtils;
 import pers.edebe.util.misc.UnsafeUtils;
 import pers.edebe.util.wrapper.AccessibleObjectWrapper;
 import pers.edebe.util.wrapper.ClassWrapper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.Writer;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -31,12 +35,16 @@ public final class ReflectionUtils {
     private static final Map<Class<?>, Object> OBJECTS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> T castNoCheck(Class<T> type, Object object) throws InstantiationException {
-        return castNoCheck((T) OBJECTS.getOrDefault(type, OBJECTS.put(type, UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(type))), object);
+    public static <T> T castNoRestrict(Class<T> type, Object object) {
+        try {
+            return castNoRestrict((T) OBJECTS.getOrDefault(type, OBJECTS.put(type, UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(type))), object);
+        } catch (InstantiationException e) {
+            throw ThrowableUtils.initCause(new ClassCastException(), e);
+        }
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T castNoCheck(T type, Object object) {
+    public static <T> T castNoRestrict(T type, Object object) {
         UnsafeUtils.UNSAFE_INSTANCE.putInt(object, CLASS_OFFSET, UnsafeUtils.UNSAFE_INSTANCE.getInt(type, CLASS_OFFSET));
         return (T) object;
     }
