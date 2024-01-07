@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'pers.edebe.util'
+version '3.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "org.jetbrains:annotations:${annotations_version}"
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+}
