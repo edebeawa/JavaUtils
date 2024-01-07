@@ -83,7 +83,9 @@ public final class FileUtils {
     }
 
     public static boolean isFileMessageDigestEquals(File file0, File file1, MessageDigest digest) throws IOException {
-        return isFileMessageDigestEquals(new FileInputStream(file0), new FileInputStream(file1), digest);
+        try (FileInputStream stream0 = new FileInputStream(file0); FileInputStream stream1 = new FileInputStream(file1)) {
+            return isFileMessageDigestEquals(stream0, stream1, digest);
+        }
     }
 
     public static boolean isFileMessageDigestEquals(File file0, File file1, String digest) throws IOException, NoSuchAlgorithmException {
@@ -110,8 +112,10 @@ public final class FileUtils {
             try (InputStream inputStream = url.openStream()) {
                 boolean write = false;
                 if (file.exists()) {
-                    if (!isFileMessageDigestEquals(inputStream, new FileInputStream(file), "MD5")) {
-                        write = true;
+                    try (FileInputStream fileStream = new FileInputStream(file)) {
+                        if (!isFileMessageDigestEquals(inputStream, fileStream, "MD5")) {
+                            write = true;
+                        }
                     }
                 } else {
                     if (file.createNewFile()) {

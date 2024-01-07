@@ -29,7 +29,7 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         }
     }
 
-    private ClassWrapper(Class<?> clazz) {
+    private ClassWrapper(Class<T> clazz) {
         super(clazz);
     }
 

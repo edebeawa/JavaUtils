@@ -8,12 +8,12 @@ import java.util.List;
 
 public final class StreamUtils {
     public static ByteArrayOutputStream toByteArrayOutputStream(InputStream stream) throws IOException {
-        try (BufferedInputStream inputStream = new BufferedInputStream(stream); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream array = new ByteArrayOutputStream()) {
             int result;
-            while ((result = inputStream.read()) != -1) {
-                outputStream.write(result);
+            while ((result = stream.read()) != -1) {
+                array.write(result);
             }
-            return outputStream;
+            return array;
         }
     }
 
