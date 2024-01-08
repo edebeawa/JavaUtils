@@ -120,24 +120,38 @@ public final class ReflectionUtils {
                 .newInstanceNoRestrict(objects);
     }
 
-    @Nullable
-    public static Class<?> getCallerClass(int depth) throws ReflectiveOperationException {
-        Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
-        if (depth > 0 && depth < classes.length) {
-            return classes[depth];
-        } else {
-            return null;
-        }
+    private static Class<?> findCallerClass(Class<?>[] classes, int depth) {
+        return (depth > 0 && depth < classes.length) ? classes[depth] : null;
     }
 
     @Nullable
-    public static Class<?> getCallerClass() throws ReflectiveOperationException {
-        Class<?>[] classes = (Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager());
+    public static Class<?> getCallerClass(int depth) throws ReflectiveOperationException {
+        return findCallerClass((Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager()), depth);
+    }
+
+    public static Class<?> getCallerClassOrThrow(int depth) throws ReflectiveOperationException {
+        Class<?> clazz = findCallerClass((Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager()), depth);
+        if (clazz != null) return clazz;
+        else throw new ClassNotFoundException();
+    }
+
+    private static Class<?> findCallerClass(Class<?>[] classes) {
         for (Class<?> clazz : classes) {
             if (!(clazz.isAnnotationPresent(CallerSensitive.class) || AccessibleObjectWrapper.class.isAssignableFrom(clazz))) {
                 return clazz;
             }
         }
         return null;
+    }
+
+    @Nullable
+    public static Class<?> getCallerClass() throws ReflectiveOperationException {
+        return findCallerClass((Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager()));
+    }
+
+    public static Class<?> getCallerClassOrThrow() throws ReflectiveOperationException {
+        Class<?> clazz = findCallerClass((Class<?>[]) SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD.invoke(new SecurityManager()));
+        if (clazz != null) return clazz;
+        else throw new ClassNotFoundException();
     }
 }
