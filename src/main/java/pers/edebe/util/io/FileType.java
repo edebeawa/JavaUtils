@@ -26,11 +26,8 @@ public enum FileType {
 
     private static byte[] toByteArray(int[] integers) {
         int length = integers.length;
-
         byte[] bytes = new byte[length];
-        for (int i = 0; i < length; i++) {
-            bytes[i] = (byte) integers[i];
-        }
+        for (int i = 0; i < length; i++) bytes[i] = (byte) integers[i];
         return bytes;
     }
 
