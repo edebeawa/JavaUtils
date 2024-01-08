@@ -10,9 +10,7 @@ public final class StreamUtils {
     public static ByteArrayOutputStream toByteArrayOutputStream(InputStream stream) throws IOException {
         try (ByteArrayOutputStream array = new ByteArrayOutputStream()) {
             int result;
-            while ((result = stream.read()) != -1) {
-                array.write(result);
-            }
+            while ((result = stream.read()) != -1) array.write(result);
             return array;
         }
     }
