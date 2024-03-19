@@ -1,7 +1,6 @@
 package pers.edebe.util.base;
 
 import pers.edebe.util.collect.ImmutableCollection;
-import pers.edebe.util.collect.ImmutableList;
 
 import java.util.*;
 

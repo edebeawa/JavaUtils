@@ -1,16 +1,16 @@
 package pers.edebe.util.base;
 
 public enum OS {
-    WINDOWS, MAC, LINUX, OTHER;
+    WINDOWS, LINUX, MACINTOSH, UNKNOWN;
 
-    public static OS getOS() {
-        String os = System.getProperty("os.name");
-        if (os.contains("Mac") || os.contains("OS X"))
-            return MAC;
-        if (os.contains("Linux"))
-            return LINUX;
-        if (os.contains("Windows"))
+    public static OS get() {
+        String name = System.getProperty("os.name");
+        if (name.contains("Windows"))
             return WINDOWS;
-        return OTHER;
+        if (name.contains("Linux"))
+            return LINUX;
+        if (name.contains("Mac") || name.contains("OS X"))
+            return MACINTOSH;
+        return UNKNOWN;
     }
 }
