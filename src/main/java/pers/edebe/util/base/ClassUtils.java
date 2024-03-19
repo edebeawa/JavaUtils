@@ -29,6 +29,10 @@ public final class ClassUtils {
         return classname.replace('.', '/');
     }
 
+    public static String toClassName(String classpath) {
+        return toBinaryName(classpath.substring(0, classpath.lastIndexOf(".")));
+    }
+
     public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws FileNotFoundException {
         URL resource = classloader.getResource(classname.replace('.', '/') + ".class");
         if (resource != null) {
