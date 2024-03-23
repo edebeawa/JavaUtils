@@ -5,6 +5,8 @@ import pers.edebe.util.collect.ImmutableCollection;
 import java.util.*;
 
 public class StringUtils {
+    public static final String NULL = String.valueOf((Object) null);
+
     public static String toLowerCase(String string) {
         return string.toLowerCase(Locale.ROOT);
     }

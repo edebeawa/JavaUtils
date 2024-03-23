@@ -36,7 +36,7 @@ public final class ArrayUtils {
             List<Object> list = info.getThisList();
             List<ArrayInfo> elements = new ArrayList<>();
             if (list == null) {
-                returnValue = "null";
+                returnValue = StringUtils.NULL;
             } else if (list.isEmpty()) {
                 returnValue = "[]";
             } else {
@@ -45,7 +45,7 @@ public final class ArrayUtils {
                 for (int i = 0; ; i++) {
                     Object element = list.get(i);
                     if (element == null) {
-                        builder.append("null");
+                        builder.append(StringUtils.NULL);
                     } else if (isArray(element)) {
                         elements.add(new ArrayInfo(list, i, element));
                     } else {
