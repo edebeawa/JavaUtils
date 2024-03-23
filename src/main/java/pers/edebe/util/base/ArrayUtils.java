@@ -11,8 +11,12 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class ArrayUtils {
+    public static boolean isArray(Object object) {
+        return object.getClass().isArray();
+    }
+
     public static Object[] toArray(Object object) {
-        if (object.getClass().isArray()) {
+        if (isArray(object)) {
             int length = Array.getLength(object);
             Object[] objects = new Object[length];
             for(int i = 0; i < length; i++) {
@@ -42,7 +46,7 @@ public final class ArrayUtils {
                     Object element = list.get(i);
                     if (element == null) {
                         builder.append("null");
-                    } else if (element.getClass().isArray()) {
+                    } else if (isArray(element)) {
                         elements.add(new ArrayInfo(list, i, element));
                     } else {
                         builder.append(element);
