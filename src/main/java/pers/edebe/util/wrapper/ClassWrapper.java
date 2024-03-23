@@ -1,6 +1,7 @@
 package pers.edebe.util.wrapper;
 
 import pers.edebe.util.base.ArrayUtils;
+import pers.edebe.util.base.StringUtils;
 import pers.edebe.util.misc.UnsafeUtils;
 import pers.edebe.util.reflect.ReflectionUtils;
 
@@ -60,7 +61,7 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         return getObject().getName() + '.' + name +
                 ((argTypes == null || argTypes.length == 0) ? "()" :
                         Arrays.stream(argTypes)
-                                .map(c -> c == null ? "null" : c.getName())
+                                .map(c -> c == null ? StringUtils.NULL : c.getName())
                                 .collect(Collectors.joining(",", "(", ")"))
                 );
     }
