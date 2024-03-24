@@ -13,13 +13,10 @@ public class ResettableStream<T> implements Stream<T> {
         reset();
     }
 
-    public void reset() {
+    @SuppressWarnings("UnusedReturnValue")
+    public ResettableStream<T> reset() {
         stream = supplier.get();
-    }
-
-    public Stream<T> getNew() {
-        reset();
-        return stream;
+        return this;
     }
 
     @Override
