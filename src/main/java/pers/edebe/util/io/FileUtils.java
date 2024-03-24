@@ -137,4 +137,8 @@ public final class FileUtils {
         }
         return file;
     }
+
+    public static File findFile(ClassResourceContext context, String name, BiFunction<Path, String, File> function) throws IOException {
+        return findFile(context.getResource(name), function);
+    }
 }
