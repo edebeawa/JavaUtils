@@ -10,7 +10,7 @@ class EdebeUtilsNative {
 
     static {
         try {
-            System.load(FileUtils.findFile(CONTEXT.getResource("/lib/libEdebeUtils.dll"), (dir, name) ->
+            System.load(FileUtils.findFile(CONTEXT, "/lib/libEdebeUtils.dll", (dir, name) ->
                     dir.resolve(name.substring(0, name.lastIndexOf("."))).resolve("libEdebeUtils.dll").toFile()
             ).getAbsolutePath());
         } catch (IOException e) {

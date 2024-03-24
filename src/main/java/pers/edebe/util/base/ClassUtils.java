@@ -35,8 +35,12 @@ public final class ClassUtils {
         return toBinaryName(classpath.substring(0, classpath.lastIndexOf(".")));
     }
 
+    public static Path getPath(ClassResourceContext context, String classname, Charset charset) throws ResourceNotFoundException {
+        return PathUtils.getPath(context.getResource(classname.replace('.', '/') + ".class"), charset);
+    }
+
     public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws ResourceNotFoundException {
-        return PathUtils.getPath(new ClassResourceContext(classloader).getResource(classname.replace('.', '/') + ".class"), charset);
+        return getPath(new ClassResourceContext(classloader), classname, charset);
     }
 
     public static Path getPath(Class<?> clazz, Charset charset) throws ResourceNotFoundException {
