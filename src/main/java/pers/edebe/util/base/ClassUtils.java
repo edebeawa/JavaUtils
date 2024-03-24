@@ -1,5 +1,7 @@
 package pers.edebe.util.base;
 
+import pers.edebe.util.exception.ResourceNotFoundException;
+import pers.edebe.util.io.ClassResourceContext;
 import pers.edebe.util.io.PathUtils;
 
 import java.io.FileNotFoundException;
@@ -33,32 +35,27 @@ public final class ClassUtils {
         return toBinaryName(classpath.substring(0, classpath.lastIndexOf(".")));
     }
 
-    public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws FileNotFoundException {
-        URL resource = classloader.getResource(classname.replace('.', '/') + ".class");
-        if (resource != null) {
-            return PathUtils.getPath(resource, charset);
-        } else {
-            throw new FileNotFoundException();
-        }
+    public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws ResourceNotFoundException {
+        return PathUtils.getPath(new ClassResourceContext(classloader).getResource(classname.replace('.', '/') + ".class"), charset);
     }
 
-    public static Path getPath(Class<?> clazz, Charset charset) throws FileNotFoundException {
+    public static Path getPath(Class<?> clazz, Charset charset) throws ResourceNotFoundException {
         return getPath(clazz.getClassLoader(), clazz.getName(), charset);
     }
 
-    public static Path getPath(ClassLoader classloader, String classname, String charsetName) throws FileNotFoundException {
+    public static Path getPath(ClassLoader classloader, String classname, String charsetName) throws ResourceNotFoundException {
         return getPath(classloader, classname, Charset.forName(charsetName));
     }
 
-    public static Path getPath(Class<?> clazz, String charsetName) throws FileNotFoundException {
+    public static Path getPath(Class<?> clazz, String charsetName) throws ResourceNotFoundException {
         return getPath(clazz.getClassLoader(), clazz.getName(), charsetName);
     }
 
-    public static Path getPath(ClassLoader classloader, String classname) throws FileNotFoundException {
+    public static Path getPath(ClassLoader classloader, String classname) throws ResourceNotFoundException {
         return getPath(classloader, classname, Charset.defaultCharset());
     }
 
-    public static Path getPath(Class<?> clazz) throws FileNotFoundException {
+    public static Path getPath(Class<?> clazz) throws ResourceNotFoundException {
         return getPath(clazz.getClassLoader(), clazz.getName());
     }
 }
