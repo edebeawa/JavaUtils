@@ -13,8 +13,12 @@ public class ResettableStream<T> implements Stream<T> {
         reset();
     }
 
+    public <I> ResettableStream(I instance, Function<I, Stream<T>> function) {
+        this(() -> function.apply(instance));
+    }
+
     @SuppressWarnings("UnusedReturnValue")
-    public ResettableStream<T> reset() {
+    public synchronized Stream<T> reset() {
         stream = supplier.get();
         return this;
     }

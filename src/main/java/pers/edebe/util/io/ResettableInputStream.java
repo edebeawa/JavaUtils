@@ -27,11 +27,6 @@ public class ResettableInputStream extends InputStream {
     }
 
     @Override
-    public void reset() throws IOException {
-        stream = supplier.get();
-    }
-
-    @Override
     public int read() throws IOException {
         return stream.read();
     }
@@ -82,8 +77,13 @@ public class ResettableInputStream extends InputStream {
     }
 
     @Override
-    public synchronized void mark(int readlimit) {
-        stream.mark(readlimit);
+    public synchronized void mark(int readLimit) {
+        stream.mark(readLimit);
+    }
+
+    @Override
+    public synchronized void reset() throws IOException {
+        stream = supplier.get();
     }
 
     @Override
