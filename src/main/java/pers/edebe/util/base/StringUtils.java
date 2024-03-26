@@ -39,7 +39,7 @@ public class StringUtils {
 
     public static String format(String pattern, Object... objects) {
         final int length = pattern.length();
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder(length < Integer.MAX_VALUE - 64 ? length + 64 : Integer.MAX_VALUE);
         int start = 0;
         for (Object object : objects) {
             int index = pattern.indexOf("{}", start);
