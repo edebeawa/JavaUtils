@@ -36,4 +36,28 @@ public class StringUtils {
         list.forEach(builder::append);
         return builder.toString();
     }
+
+    public static String format(String pattern, Object... objects) {
+        final int length = pattern.length();
+        StringBuilder builder = new StringBuilder();
+        int start = 0;
+        for (Object object : objects) {
+            int index = pattern.indexOf("{}", start);
+            if (index == -1) {
+                if (start == 0)
+                    return pattern;
+                builder.append(pattern, start, length);
+                return builder.toString();
+            } else {
+                builder.append(pattern, start, index);
+                if (ArrayUtils.isArray(object))
+                    builder.append(ArrayUtils.toString(ArrayUtils.toArray(object)));
+                else
+                    builder.append(object);
+                start = index + 2;
+            }
+        }
+        builder.append(pattern, start, length);
+        return builder.toString();
+    }
 }
