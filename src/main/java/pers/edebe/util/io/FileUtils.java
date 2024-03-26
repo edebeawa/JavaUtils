@@ -24,6 +24,16 @@ public final class FileUtils {
         return getByteArray(path.toFile());
     }
 
+    public static String getString(File file) throws IOException {
+        try (FileInputStream stream = new FileInputStream(file)) {
+            return StreamUtils.toString(stream);
+        }
+    }
+
+    public static String getString(Path path) throws IOException {
+        return getString(path.toFile());
+    }
+
     public static boolean isFileSuffixEquals(String name, String suffix) {
         return StringUtils.toLowerCase(name.substring(name.lastIndexOf(".") + 1)).equals(StringUtils.toLowerCase(suffix));
     }
