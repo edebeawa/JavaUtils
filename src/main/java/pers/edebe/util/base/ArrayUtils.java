@@ -16,15 +16,12 @@ public final class ArrayUtils {
     }
 
     public static Object[] toArray(Object object) {
-        if (isArray(object)) {
-            int length = Array.getLength(object);
-            Object[] objects = new Object[length];
-            for(int i = 0; i < length; i++) {
-                objects[i] = Array.get(object, i);
-            }
-            return objects;
+        int length = Array.getLength(object);
+        Object[] objects = new Object[length];
+        for(int i = 0; i < length; i++) {
+            objects[i] = Array.get(object, i);
         }
-        return new Object[0];
+        return objects;
     }
 
     public static String toString(Object[] array) {
