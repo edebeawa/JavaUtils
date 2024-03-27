@@ -31,6 +31,10 @@ public final class ClassUtils {
         return classname.replace('.', '/');
     }
 
+    public static String toClassName(String classpath) {
+        return toBinaryName(classpath.substring(0, classpath.lastIndexOf(".")));
+    }
+
     public static Path getPath(ClassResourceContext context, String classname, Charset charset) throws IOException {
         return PathUtils.getPath(context.getResource(classname.replace('.', '/') + ".class"), charset);
     }
