@@ -1,6 +1,6 @@
 package pers.edebe.util.io;
 
-import pers.edebe.util.function.BiIOConsumer;
+import pers.edebe.util.function.ThrowableBiConsumer;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -56,7 +56,7 @@ public final class StreamUtils {
         }
     }
 
-    public static void readAllEntry(ZipInputStream stream, BiIOConsumer<ZipEntry, ResettableInputStream> consumer) throws IOException {
+    public static void readAllEntry(ZipInputStream stream, ThrowableBiConsumer<ZipEntry, ResettableInputStream, IOException> consumer) throws IOException {
         ZipEntry entry;
         while ((entry = stream.getNextEntry()) != null)
             consumer.accept(entry, new ResettableInputStream(stream));
