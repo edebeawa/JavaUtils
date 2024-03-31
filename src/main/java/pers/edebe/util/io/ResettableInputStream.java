@@ -1,23 +1,23 @@
 package pers.edebe.util.io;
 
 import org.jetbrains.annotations.NotNull;
-import pers.edebe.util.function.IOFunction;
-import pers.edebe.util.function.IOSupplier;
+import pers.edebe.util.function.ThrowableFunction;
+import pers.edebe.util.function.ThrowableSupplier;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ResettableInputStream extends InputStream {
-    private final IOSupplier<InputStream> supplier;
+    private final ThrowableSupplier<InputStream, IOException> supplier;
     private InputStream stream;
 
-    public ResettableInputStream(IOSupplier<InputStream> supplier) throws IOException {
+    public ResettableInputStream(ThrowableSupplier<InputStream, IOException> supplier) throws IOException {
         this.supplier = supplier;
         reset();
     }
 
-    public <T> ResettableInputStream(T input, IOFunction<T, InputStream> function) throws IOException {
+    public <T> ResettableInputStream(T input, ThrowableFunction<T, InputStream, IOException> function) throws IOException {
         this(() -> function.apply(input));
     }
 
