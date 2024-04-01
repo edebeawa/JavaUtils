@@ -1,6 +1,6 @@
 package pers.edebe.util.base;
 
-public class StringBuilderUtils {
+public class AbstractStringBuilderUtils {
     public static StringBuilder clear(StringBuilder builder) {
         return builder.delete(0, builder.length());
     }
