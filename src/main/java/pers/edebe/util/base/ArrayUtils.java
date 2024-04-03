@@ -30,7 +30,7 @@ public final class ArrayUtils {
         String returnValue = null;
         while (!stack.isEmpty()) {
             ArrayInfo info = stack.pop();
-            List<Object> list = info.getThisList();
+            List<Object> list = info.thisList();
             List<ArrayInfo> elements = new ArrayList<>();
             if (list == null) {
                 returnValue = StringUtils.NULL;
@@ -67,13 +67,7 @@ public final class ArrayUtils {
         return returnValue;
     }
 
-    @Getter
-    @AllArgsConstructor
-    private static class ArrayInfo {
-        private final List<Object> superList;
-        private final int index;
-        private final List<Object> thisList;
-
+    private record ArrayInfo(List<Object> superList, int index, List<Object> thisList) {
         public ArrayInfo(List<Object> list, int index, Object[] array) {
             this(list, index, new ArrayList<>(Arrays.stream(array).toList()));
         }

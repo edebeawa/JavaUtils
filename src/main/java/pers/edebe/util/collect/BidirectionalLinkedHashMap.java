@@ -1,15 +1,11 @@
 package pers.edebe.util.collect;
 
-import lombok.experimental.Accessors;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Accessors(fluent = true)
 public class BidirectionalLinkedHashMap<K, V> extends AbstractBidirectionalMap<K, V> {
     private final LinkedHashMap<K, V> map;
     private final MapConstructor<BidirectionalLinkedHashMap<V, K>, V, K> constructor;
-    private BidirectionalLinkedHashMap<V, K> reverse = null;
 
     public BidirectionalLinkedHashMap(int initialCapacity, float loadFactor) {
         map = new LinkedHashMap<>(initialCapacity, loadFactor);
@@ -34,16 +30,12 @@ public class BidirectionalLinkedHashMap<K, V> extends AbstractBidirectionalMap<K
     }
 
     @Override
-    public LinkedHashMap<K, V> currentMap() {
+    protected LinkedHashMap<K, V> currentMap() {
         return map;
     }
 
     @Override
-    public BidirectionalLinkedHashMap<V, K> reverse() {
-        if (reverse == null) {
-            reverse = constructor.newInstance(BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new);
-            reverse.reverse = this;
-        }
-        return reverse;
+    protected BidirectionalLinkedHashMap<V, K> newReverseMap() {
+        return constructor.newInstance(BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new, BidirectionalLinkedHashMap::new);
     }
 }

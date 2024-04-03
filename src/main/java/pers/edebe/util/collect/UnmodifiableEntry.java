@@ -19,4 +19,17 @@ public class UnmodifiableEntry<K, V> extends AbstractUnmodifiableEntry<K, V> {
     public V getValue() {
         return entry.getValue();
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof UnmodifiableEntry<?, ?> unmodifiable)
+            return entry.equals(unmodifiable.entry);
+        else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return entry.hashCode();
+    }
 }
