@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
     protected abstract List<K> keyList();
@@ -38,49 +37,57 @@ public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
         return valueList().contains(value);
     }
 
-    @Override
     @SuppressWarnings("SuspiciousMethodCalls")
-    public V get(Object key) {
-        int index = keyList().indexOf(key);
-        if (index == -1)
-            return null;
-        else
-            return valueList().get(index);
+    public int keyIndexOf(Object key) {
+        return keyList().indexOf(key);
     }
 
     @SuppressWarnings("SuspiciousMethodCalls")
-    private V tryModify(Object key, Function<Integer, V> function0, Function<Integer, V> function1) {
-        int index = keyList().indexOf(key);
+    public int valueIndexOf(Object value) {
+        return valueList().indexOf(value);
+    }
+
+    public K getKey(int index) {
+        return keyList().get(index);
+    }
+
+    public V getValue(int index) {
+        return valueList().get(index);
+    }
+
+    @Override
+    public V get(Object key) {
+        int index = keyIndexOf(key);
         if (index == -1)
-            return function0.apply(index);
+            return null;
         else
-            return function1.apply(index);
+            return getValue(index);
     }
 
     @Nullable
     @Override
     public V put(K key, V value) {
-        return tryModify(key, (index) -> {
+        int index = keyIndexOf(key);
+        if (index == -1) {
             keyList().add(key);
             valueList().add(value);
-            return value;
-        }, (index) -> {
-            valueList().set(index, value);
-            return value;
-        });
+        } else
+            replaceValue(index, value);
+        return value;
+    }
+
+    public V remove(int index) {
+        keyList().remove(index);
+        return valueList().remove(index);
     }
 
     @Override
     public V remove(Object key) {
-        return tryModify(key, (index) -> null, (index) -> {
-            keyList().remove(index.intValue());
-            return valueList().remove(index.intValue());
-        });
-    }
-
-    @Override
-    public void putAll(@NotNull Map<? extends K, ? extends V> m) {
-        m.forEach(this::put);
+        int index = keyIndexOf(key);
+        if (index == -1)
+            return null;
+        else
+            return remove(index);
     }
 
     @Override
@@ -110,13 +117,29 @@ public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
         return set;
     }
 
+    public K replaceKey(int index, K key) {
+        return keyList().set(index, key);
+    }
+
+    public V replaceValue(int index, V value) {
+        return valueList().set(index, value);
+    }
+
     @Nullable
     @Override
     public V replace(K key, V value) {
-        return tryModify(key, (index) -> null, (index) -> valueList().set(index, value));
+        int index = keyIndexOf(key);
+        if (index == -1)
+            return null;
+        else
+            return replaceValue(index, value);
     }
 
-    private record Element<K, V>(AbstractListMap<K, V> map, int index) implements Entry<K, V> {
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    private static class Element<K, V> implements Entry<K, V> {
+        private final AbstractListMap<K, V> map;
+        private final int index;
+
         @Override
         public K getKey() {
             return map.keyList().get(index);
@@ -134,8 +157,8 @@ public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
 
         @Override
         public boolean equals(Object object) {
-            if (object instanceof Element<?, ?> element)
-                return index == element.index;
+            if (object instanceof Element)
+                return index == ((Element<?, ?>) object).index;
             else
                 return false;
         }
