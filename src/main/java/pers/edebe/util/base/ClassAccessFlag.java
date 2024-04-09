@@ -2,8 +2,6 @@ package pers.edebe.util.base;
 
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +30,7 @@ public enum ClassAccessFlag implements AccessFlag {
         return name;
     }
 
-    private static final Map<Integer, ClassAccessFlag> MAP = new LinkedHashMap<>();
-
-    static {
-        Arrays.stream(ClassAccessFlag.values()).forEach((flag) -> MAP.put(flag.value, flag));
-        CollectionUtils.reverse(MAP);
-    }
+    private static final Map<Integer, ClassAccessFlag> MAP = AccessFlag.newMap(ClassAccessFlag.values());
 
     public static int serialize(List<ClassAccessFlag> list) {
         return AccessFlag.serialize(list);
