@@ -6,18 +6,18 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public abstract class AbstractBidirectionalListMap<K, V> extends AbstractListMap<K, V> implements BidirectionalMap<K, V> {
-    private AbstractBidirectionalListMap<V, K> reverse = null;
+public abstract class AbstractBiListMap<K, V> extends AbstractListMap<K, V> implements BiMap<K, V> {
+    private AbstractBiListMap<V, K> inverse = null;
 
-    protected abstract AbstractBidirectionalListMap<V, K> newReverseMap(List<V> keyList, List<K> valueList);
+    protected abstract AbstractBiListMap<V, K> newInverseMap(List<V> keyList, List<K> valueList);
 
     @Override
-    public AbstractBidirectionalListMap<V, K> reverse() {
-        if (reverse == null) {
-            reverse = newReverseMap(valueList(), keyList());
-            reverse.reverse = this;
+    public AbstractBiListMap<V, K> inverse() {
+        if (inverse == null) {
+            inverse = newInverseMap(valueList(), keyList());
+            inverse.inverse = this;
         }
-        return reverse;
+        return inverse;
     }
 
     private V tryModify(K key, V value, BiFunction<Integer, Integer, V> function) {

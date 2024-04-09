@@ -38,49 +38,57 @@ public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
         return valueList().contains(value);
     }
 
-    @Override
     @SuppressWarnings("SuspiciousMethodCalls")
-    public V get(Object key) {
-        int index = keyList().indexOf(key);
-        if (index == -1)
-            return null;
-        else
-            return valueList().get(index);
+    public int keyIndexOf(Object key) {
+        return keyList().indexOf(key);
     }
 
     @SuppressWarnings("SuspiciousMethodCalls")
-    private V tryModify(Object key, Function<Integer, V> function0, Function<Integer, V> function1) {
-        int index = keyList().indexOf(key);
+    public int valueIndexOf(Object value) {
+        return valueList().indexOf(value);
+    }
+
+    public K getKey(int index) {
+        return keyList().get(index);
+    }
+
+    public V getValue(int index) {
+        return valueList().get(index);
+    }
+
+    @Override
+    public V get(Object key) {
+        int index = keyIndexOf(key);
         if (index == -1)
-            return function0.apply(index);
+            return null;
         else
-            return function1.apply(index);
+            return getValue(index);
     }
 
     @Nullable
     @Override
     public V put(K key, V value) {
-        return tryModify(key, (index) -> {
+        int index = keyIndexOf(key);
+        if (index == -1) {
             keyList().add(key);
             valueList().add(value);
-            return value;
-        }, (index) -> {
-            valueList().set(index, value);
-            return value;
-        });
+        } else
+            replaceValue(index, value);
+        return value;
+    }
+
+    public V remove(int index) {
+        keyList().remove(index);
+        return valueList().remove(index);
     }
 
     @Override
     public V remove(Object key) {
-        return tryModify(key, (index) -> null, (index) -> {
-            keyList().remove(index.intValue());
-            return valueList().remove(index.intValue());
-        });
-    }
-
-    @Override
-    public void putAll(@NotNull Map<? extends K, ? extends V> m) {
-        m.forEach(this::put);
+        int index = keyIndexOf(key);
+        if (index == -1)
+            return null;
+        else
+            return remove(index);
     }
 
     @Override
@@ -110,10 +118,22 @@ public abstract class AbstractListMap<K, V> extends AbstractMap<K, V> {
         return set;
     }
 
+    public K replaceKey(int index, K key) {
+        return keyList().set(index, key);
+    }
+
+    public V replaceValue(int index, V value) {
+        return valueList().set(index, value);
+    }
+
     @Nullable
     @Override
     public V replace(K key, V value) {
-        return tryModify(key, (index) -> null, (index) -> valueList().set(index, value));
+        int index = keyIndexOf(key);
+        if (index == -1)
+            return null;
+        else
+            return replaceValue(index, value);
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
