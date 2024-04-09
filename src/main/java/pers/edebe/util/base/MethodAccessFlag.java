@@ -35,12 +35,7 @@ public enum MethodAccessFlag implements AccessFlag {
         return name;
     }
 
-    private static final Map<Integer, MethodAccessFlag> MAP = new LinkedHashMap<>();
-
-    static {
-        Arrays.stream(MethodAccessFlag.values()).forEach((flag) -> MAP.put(flag.value, flag));
-        CollectionUtils.reverse(MAP);
-    }
+    private static final Map<Integer, MethodAccessFlag> MAP = AccessFlag.newMap(MethodAccessFlag.values());
 
     public static int serialize(List<MethodAccessFlag> list) {
         return AccessFlag.serialize(list);

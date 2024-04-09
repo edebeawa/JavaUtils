@@ -1,12 +1,19 @@
 package pers.edebe.util.base;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import pers.edebe.util.collect.ImmutableMap;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 interface AccessFlag {
     int getValue();
+
+    static <T extends AccessFlag> Map<Integer, T> newMap(T[] values) {
+        Map<Integer, T> map = new LinkedHashMap<>();
+        Arrays.stream(values).forEach((flag) -> map.put(flag.getValue(), flag));
+        CollectionUtils.reverse(map);
+        return new ImmutableMap<>(map);
+    }
 
     static int serialize(List<? extends AccessFlag> list) {
         AtomicInteger access = new AtomicInteger();

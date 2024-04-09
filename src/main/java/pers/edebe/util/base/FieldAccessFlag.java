@@ -32,12 +32,7 @@ public enum FieldAccessFlag implements AccessFlag {
         return name;
     }
 
-    private static final Map<Integer, FieldAccessFlag> MAP = new LinkedHashMap<>();
-
-    static {
-        Arrays.stream(FieldAccessFlag.values()).forEach((flag) -> MAP.put(flag.value, flag));
-        CollectionUtils.reverse(MAP);
-    }
+    private static final Map<Integer, FieldAccessFlag> MAP = AccessFlag.newMap(FieldAccessFlag.values());
 
     public static int serialize(List<FieldAccessFlag> list) {
         return AccessFlag.serialize(list);
