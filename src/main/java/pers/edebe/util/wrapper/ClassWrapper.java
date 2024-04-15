@@ -364,7 +364,7 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
     }
 
     public T castNoRestrict(Object object) throws InstantiationException {
-        return ReflectionUtils.castNoRestrict(getObject(), object);
+        return ReflectionUtils.castNoRestrict(object, getObject());
     }
 
     @SuppressWarnings("unchecked")
