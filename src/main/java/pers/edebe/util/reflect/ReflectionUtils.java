@@ -12,7 +12,8 @@ import java.util.*;
 
 @CallerSensitive
 public final class ReflectionUtils {
-    private static final long CLASS_OFFSET = 8;
+    private static final long CLASS_TYPE_OFFSET = 72;
+    private static final long ELEMENT_TYPE_OFFSET = 8;
     private static final Method CLASS_FOR_NAME_METHOD;
     private static final Method SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD;
 
@@ -25,21 +26,33 @@ public final class ReflectionUtils {
         }
     }
 
+    private static void copyInt(Object object0, Object object1, long offset) {
+        UnsafeUtils.UNSAFE_INSTANCE.putInt(object0, offset, UnsafeUtils.UNSAFE_INSTANCE.getInt(object1, offset));
+    }
+
+    public static void setClassType(Class<?> clazz, Class<?> type) {
+        copyInt(clazz, type, CLASS_TYPE_OFFSET);
+    }
+
     private static final Map<Class<?>, Object> OBJECTS = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
-    public static <T> T castNoRestrict(Class<T> type, Object object) {
-        try {
-            return castNoRestrict((T) OBJECTS.getOrDefault(type, OBJECTS.put(type, UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(type))), object);
-        } catch (InstantiationException e) {
-            throw ThrowableUtils.initCause(new ClassCastException(), e);
-        }
+    public static void setElementType(Object object, Object type) {
+        copyInt(object, type, ELEMENT_TYPE_OFFSET);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T castNoRestrict(T type, Object object) {
-        UnsafeUtils.UNSAFE_INSTANCE.putInt(object, CLASS_OFFSET, UnsafeUtils.UNSAFE_INSTANCE.getInt(type, CLASS_OFFSET));
+    public static <T> T castNoRestrict(Object object, T type) {
+        setElementType(type, object);
         return (T) object;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T castNoRestrict(Object object, Class<T> type) {
+        try {
+            return castNoRestrict(object, (T) OBJECTS.getOrDefault(type, OBJECTS.put(type, UnsafeUtils.UNSAFE_INSTANCE.allocateInstance(type))));
+        } catch (InstantiationException e) {
+            throw ThrowableUtils.initCause(new ClassCastException(), e);
+        }
     }
 
     public static void setAccessibleNoRestrict(AccessibleObject object, boolean flag) {
