@@ -1,5 +1,6 @@
 package pers.edebe.util.reflect;
 
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Nullable;
 import pers.edebe.util.base.ClassUtils;
 import pers.edebe.util.base.ThrowableUtils;
@@ -13,22 +14,20 @@ import java.io.Writer;
 import java.lang.reflect.*;
 import java.util.*;
 
+@UtilityClass
 @CallerSensitive
-public final class ReflectionUtils {
+public class ReflectionUtils {
     private static final long CLASS_TYPE_OFFSET = 72;
     private static final long ELEMENT_TYPE_OFFSET = 8;
-    public static final Object REFLECTION_FACTORY_INSTANCE;
-    public static final Class<?> REFLECTION_FACTORY_CLASS;
     private static final Method CLASS_FOR_NAME_METHOD;
     private static final Method SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD;
 
     static {
         try {
-            REFLECTION_FACTORY_INSTANCE = getAccessibleDeclaredMethod(Class.class, "getReflectionFactory").invoke(null);
-            REFLECTION_FACTORY_CLASS = REFLECTION_FACTORY_INSTANCE.getClass();
             CLASS_FOR_NAME_METHOD = getAccessibleDeclaredMethod(Class.class, "forName0", String.class, boolean.class, ClassLoader.class, Class.class);
             SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD = getAccessibleDeclaredMethod(SecurityManager.class, "getClassContext");
-        } catch (ReflectiveOperationException e) {
+        }
+        catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }

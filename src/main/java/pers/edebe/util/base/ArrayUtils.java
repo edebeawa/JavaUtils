@@ -1,11 +1,14 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-public final class ArrayUtils {
+@UtilityClass
+public class ArrayUtils {
     public static boolean isArray(Object object) {
         return object.getClass().isArray();
     }

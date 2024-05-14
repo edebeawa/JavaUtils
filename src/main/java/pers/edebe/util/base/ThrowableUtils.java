@@ -1,5 +1,6 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +9,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Locale;
 
+@UtilityClass
 public class ThrowableUtils {
     @SuppressWarnings("unchecked")
     public static <T extends Throwable> T initCause(T throwable, Throwable cause) {

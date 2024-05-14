@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
+    private static final Object REFLECTION_FACTORY_INSTANCE;
     private static final Method REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD;
     private static final Method CLASS_GET_DECLARED_FIELDS_METHOD;
     private static final Method CLASS_GET_DECLARED_METHODS_METHOD;
@@ -20,12 +21,13 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
 
     static {
         try {
-            REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(ReflectionUtils.REFLECTION_FACTORY_CLASS, "getExecutableSharedParameterTypes", Executable.class);
+            REFLECTION_FACTORY_INSTANCE = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getReflectionFactory").invoke(null);
+            REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.forName("jdk.internal.reflect.ReflectionFactory"), "getExecutableSharedParameterTypes", Executable.class);
             CLASS_GET_DECLARED_FIELDS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredFields0", boolean.class);
             CLASS_GET_DECLARED_METHODS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredMethods0", boolean.class);
             CLASS_GET_DECLARED_CONSTRUCTORS_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredConstructors0", boolean.class);
             CLASS_GET_DECLARED_CLASSES_METHOD = ReflectionUtils.getAccessibleDeclaredMethod(Class.class, "getDeclaredClasses0");
-        } catch (NoSuchMethodException e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -67,7 +69,7 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
     }
 
     private static Class<?>[] getExecutableSharedParameterTypes(Executable executable) throws ReflectiveOperationException {
-        return (Class<?>[]) REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD.invoke(ReflectionUtils.REFLECTION_FACTORY_INSTANCE, executable);
+        return (Class<?>[]) REFLECTION_FACTORY_GET_EXECUTABLE_SHARED_PARAMETER_TYPES_METHOD.invoke(REFLECTION_FACTORY_INSTANCE, executable);
     }
 
     private Field[] getFields(boolean restrict, boolean publicOnly) throws ReflectiveOperationException {

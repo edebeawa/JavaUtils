@@ -1,10 +1,13 @@
 package pers.edebe.util.io;
 
+import lombok.experimental.UtilityClass;
+
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
+@UtilityClass
 public class PathUtils {
     public static Path getPath(URL resource, Charset charset) {
         String path = URLDecoder.decode(resource.getPath(), charset);

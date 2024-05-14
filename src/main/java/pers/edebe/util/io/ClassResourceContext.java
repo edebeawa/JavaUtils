@@ -46,6 +46,7 @@ public class ClassResourceContext {
         try (InputStream inputStream = getResourceAsStream(name); FileOutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(StreamUtils.toByteArray(inputStream));
         }
+        file.deleteOnExit();
         return file;
     }
 

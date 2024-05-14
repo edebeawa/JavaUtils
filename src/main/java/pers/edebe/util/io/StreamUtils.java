@@ -1,5 +1,6 @@
 package pers.edebe.util.io;
 
+import lombok.experimental.UtilityClass;
 import pers.edebe.util.function.ThrowableBiConsumer;
 
 import java.io.*;
@@ -12,7 +13,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public final class StreamUtils {
+@UtilityClass
+public class StreamUtils {
     public static void writeAll(InputStream inputStream, OutputStream outputStream) throws IOException {
         int result;
         while ((result = inputStream.read()) != -1) outputStream.write(result);

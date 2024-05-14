@@ -1,7 +1,10 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.*;
 
+@UtilityClass
 public class StringUtils {
     public static final String NULL = String.valueOf((Object) null);
 

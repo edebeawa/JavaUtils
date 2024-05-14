@@ -1,5 +1,9 @@
 package pers.edebe.util.jni;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NativeReflectionUtils extends EdebeUtilsNative {
     public static native Class<?> defineClass(String name, ClassLoader loader, byte[] data, int offset, int length);
 
