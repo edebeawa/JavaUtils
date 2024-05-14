@@ -1,5 +1,6 @@
 package pers.edebe.util.io;
 
+import lombok.experimental.UtilityClass;
 import pers.edebe.util.base.StringUtils;
 
 import java.io.File;
@@ -13,7 +14,8 @@ import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public final class FileUtils {
+@UtilityClass
+public class FileUtils {
     public static byte[] getByteArray(File file) throws IOException {
         try (FileInputStream stream = new FileInputStream(file)) {
             return StreamUtils.toByteArray(stream);

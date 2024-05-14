@@ -1,10 +1,12 @@
 package pers.edebe.util.misc;
 
+import lombok.experimental.UtilityClass;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-public final class UnsafeUtils {
+@UtilityClass
+public class UnsafeUtils {
     public static final long ACCESS_MODIFIER_OFFSET;
     public static final Unsafe UNSAFE_INSTANCE;
 

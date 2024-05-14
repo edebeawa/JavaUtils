@@ -1,5 +1,8 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class AbstractStringBuilderUtils {
     public static StringBuilder clear(StringBuilder builder) {
         return builder.delete(0, builder.length());

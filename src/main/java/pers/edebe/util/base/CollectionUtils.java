@@ -1,9 +1,11 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
 import pers.edebe.util.collect.ArrayListMap;
 
 import java.util.Map;
 
+@UtilityClass
 public class CollectionUtils {
     public static <K, V> void reverse(Map<K, V> map) {
         ArrayListMap<K, V> map0 = new ArrayListMap<>(map);

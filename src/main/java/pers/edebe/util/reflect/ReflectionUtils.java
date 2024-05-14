@@ -1,5 +1,6 @@
 package pers.edebe.util.reflect;
 
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Nullable;
 import pers.edebe.util.base.ClassUtils;
 import pers.edebe.util.base.ThrowableUtils;
@@ -10,8 +11,9 @@ import pers.edebe.util.wrapper.ClassWrapper;
 import java.lang.reflect.*;
 import java.util.*;
 
+@UtilityClass
 @CallerSensitive
-public final class ReflectionUtils {
+public class ReflectionUtils {
     private static final long CLASS_TYPE_OFFSET = 72;
     private static final long ELEMENT_TYPE_OFFSET = 8;
     private static final Method CLASS_FOR_NAME_METHOD;

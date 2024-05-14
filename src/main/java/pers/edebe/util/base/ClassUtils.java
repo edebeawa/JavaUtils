@@ -1,5 +1,6 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
 import pers.edebe.util.io.ClassResourceContext;
 import pers.edebe.util.io.PathUtils;
 
@@ -10,7 +11,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public final class ClassUtils {
+@UtilityClass
+public class ClassUtils {
     public static Class<?>[] getClass(Object[] objects) {
         return Arrays.stream(objects).map(Object::getClass).toArray(Class[]::new);
     }

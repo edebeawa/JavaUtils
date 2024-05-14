@@ -2,6 +2,7 @@ package pers.edebe.util.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import pers.edebe.util.collect.ImmutableMap;
 
 import java.lang.reflect.Array;
@@ -10,7 +11,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public final class ArrayUtils {
+@UtilityClass
+public class ArrayUtils {
     public static boolean isArray(Object object) {
         return object.getClass().isArray();
     }

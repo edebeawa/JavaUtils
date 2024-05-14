@@ -1,7 +1,10 @@
 package pers.edebe.util.base;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.Random;
 
+@UtilityClass
 public class MathUtils {
     public static int nextInt(Random random, int min, int max) {
         return random.nextInt(max - min + 1) + min;

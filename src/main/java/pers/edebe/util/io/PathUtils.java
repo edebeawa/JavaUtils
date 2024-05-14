@@ -1,5 +1,7 @@
 package pers.edebe.util.io;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -7,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+@UtilityClass
 public class PathUtils {
     public static Path of(String first, String... more) {
         return FileSystems.getDefault().getPath(first, more);
