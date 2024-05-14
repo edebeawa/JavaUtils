@@ -2,14 +2,14 @@ package pers.edebe.util.io;
 
 import pers.edebe.util.base.StringUtils;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -108,47 +108,5 @@ public final class FileUtils {
 
     public static boolean isFileMessageDigestEquals(Path path0, Path path1, String digest) throws IOException, NoSuchAlgorithmException {
         return isFileMessageDigestEquals(path0, path1, MessageDigest.getInstance(digest));
-    }
-
-    public static File findFile(URL url, BiFunction<Path, String, File> function) throws IOException {
-        Path path = PathUtils.getPath(url);
-        File file;
-        if (FileType.JAR.isThisFileType(path)) {
-            String filepath = path.toString();
-            int index = filepath.lastIndexOf(File.separator);
-            path = Path.of(filepath.substring(0, index));
-            file = function.apply(path, filepath.substring(index + 1));
-            Files.createDirectories(path);
-            try (InputStream inputStream = url.openStream()) {
-                boolean write = false;
-                if (file.exists()) {
-                    try (FileInputStream fileStream = new FileInputStream(file)) {
-                        if (!isFileMessageDigestEquals(inputStream, fileStream, "MD5")) {
-                            write = true;
-                        }
-                    }
-                } else {
-                    if (file.createNewFile()) {
-                        write = true;
-                    } else {
-                        throw new FileNotFoundException();
-                    }
-                }
-                if (write) {
-                    try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                        outputStream.write(StreamUtils.toByteArray(inputStream));
-                    }
-                }
-            } catch (NoSuchAlgorithmException e) {
-                throw new IOException(e);
-            }
-        } else {
-            file = path.toFile();
-        }
-        return file;
-    }
-
-    public static File findFile(ClassResourceContext context, String name, BiFunction<Path, String, File> function) throws IOException {
-        return findFile(context.getResource(name), function);
     }
 }
