@@ -26,7 +26,7 @@ public final class ReflectionUtils {
         }
     }
 
-    private static void copyInt(Object object0, Object object1, long offset) {
+    public static void copyInt(Object object0, Object object1, long offset) {
         UnsafeUtils.UNSAFE_INSTANCE.putInt(object0, offset, UnsafeUtils.UNSAFE_INSTANCE.getInt(object1, offset));
     }
 

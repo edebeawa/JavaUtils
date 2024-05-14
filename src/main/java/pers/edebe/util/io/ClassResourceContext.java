@@ -1,7 +1,10 @@
 package pers.edebe.util.io;
 
+import org.jetbrains.annotations.Nullable;
 import pers.edebe.util.exception.ResourceNotFoundException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -36,6 +39,18 @@ public class ClassResourceContext {
             return stream;
         else
             throw new ResourceNotFoundException(name);
+    }
+
+    public File getResourceAsTempFile(String name, String prefix, String suffix, @Nullable File directory) throws IOException {
+        File file = File.createTempFile(prefix, suffix, directory);
+        try (InputStream inputStream = getResourceAsStream(name); FileOutputStream outputStream = new FileOutputStream(file)) {
+            outputStream.write(StreamUtils.toByteArray(inputStream));
+        }
+        return file;
+    }
+
+    public File getResourceAsTempFile(String name, String prefix, String suffix) throws IOException {
+        return getResourceAsTempFile(name, prefix, suffix, null);
     }
 
     public String getResourceAsString(String name) throws IOException {
