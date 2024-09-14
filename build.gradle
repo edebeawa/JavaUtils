@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group 'pers.edebe.util'
-version '3.0.0-SNAPSHOT'
+group 'be.cloudns.edebe.util'
+version '4.0.0'
 
 repositories {
     mavenCentral()
@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     //implementation fileTree(dir: "lib", includes: ['*.jar'])
-    compileOnly "org.jetbrains:annotations:${annotations_version}"
-    compileOnly "org.projectlombok:lombok:${lombok_version}"
-    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
+    compileOnly 'org.jetbrains:annotations:24.0.1'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
 }
