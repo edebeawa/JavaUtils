@@ -1,12 +1,12 @@
 package be.cloudns.edebe.util.reflect;
 
-import be.cloudns.edebe.util.wrapper.ClassWrapper;
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.Nullable;
 import be.cloudns.edebe.util.base.ClassUtils;
 import be.cloudns.edebe.util.base.ThrowableUtils;
 import be.cloudns.edebe.util.misc.UnsafeUtils;
 import be.cloudns.edebe.util.wrapper.AccessibleObjectWrapper;
+import be.cloudns.edebe.util.wrapper.ClassWrapper;
+import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -21,11 +21,16 @@ public class ReflectionUtils {
     private static final long ELEMENT_TYPE_OFFSET = 8;
     private static final Method CLASS_FOR_NAME_METHOD;
     private static final Method SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD;
+    private static final Method STACK_STREAM_FACTORY_IS_METHOD_HANDLE_FRAME_METHOD;
+    private static final Method STACK_STREAM_FACTORY_IS_REFLECTION_FRAME_METHOD;
 
     static {
         try {
             CLASS_FOR_NAME_METHOD = getAccessibleDeclaredMethod(Class.class, "forName0", String.class, boolean.class, ClassLoader.class, Class.class);
             SECURITY_MANAGER_GET_CLASS_CONTEXT_METHOD = getAccessibleDeclaredMethod(SecurityManager.class, "getClassContext");
+            final Class<?> classStackStreamFactory = Class.forName("java.lang.StackStreamFactory");
+            STACK_STREAM_FACTORY_IS_METHOD_HANDLE_FRAME_METHOD = getAccessibleDeclaredMethod(classStackStreamFactory, "isMethodHandleFrame", Class.class);
+            STACK_STREAM_FACTORY_IS_REFLECTION_FRAME_METHOD = getAccessibleDeclaredMethod(classStackStreamFactory, "isReflectionFrame", Class.class);
         }
         catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
@@ -139,6 +144,14 @@ public class ReflectionUtils {
                 .newInstanceNoRestrict(objects);
     }
 
+    public static boolean isMethodHandleClass(Class<?> clazz) throws ReflectiveOperationException {
+        return (boolean) STACK_STREAM_FACTORY_IS_METHOD_HANDLE_FRAME_METHOD.invoke(null, clazz);
+    }
+
+    public static boolean isReflectionClass(Class<?> clazz) throws ReflectiveOperationException {
+        return (boolean) STACK_STREAM_FACTORY_IS_REFLECTION_FRAME_METHOD.invoke(null, clazz);
+    }
+
     private static Class<?> findCallerClass(Class<?>[] classes, int depth) {
         return (depth > 0 && depth < classes.length) ? classes[depth] : null;
     }
@@ -154,9 +167,12 @@ public class ReflectionUtils {
         else throw new ClassNotFoundException();
     }
 
-    private static Class<?> findCallerClass(Class<?>[] classes) {
+    private static Class<?> findCallerClass(Class<?>[] classes) throws ReflectiveOperationException {
         for (Class<?> clazz : classes) {
-            if (!(clazz.isAnnotationPresent(CallerSensitive.class) || AccessibleObjectWrapper.class.isAssignableFrom(clazz))) {
+            if (!(clazz.isAnnotationPresent(CallerSensitive.class) ||
+                    AccessibleObjectWrapper.class.isAssignableFrom(clazz) ||
+                    isMethodHandleClass(clazz) ||
+                    isReflectionClass(clazz))) {
                 return clazz;
             }
         }
