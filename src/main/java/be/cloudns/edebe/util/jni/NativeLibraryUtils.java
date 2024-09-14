@@ -13,7 +13,7 @@ import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuppressWarnings("SpellCheckingInspection")
-public class NativeLibraryUtils extends EdebeUtilsNative {
+public class NativeLibraryUtils extends JavaUtilsNative {
     private static final Class<?> NATIVE_LIBRARIES_CLASS;
     private static final FieldWrapper<Map<String, Object>> NATIVE_LIBRARIES_LIBRARIES_FIELD;
     private static final MethodWrapper<?> NATIVE_LIBRARIES_LOAD_LIBRARY_METHOD;

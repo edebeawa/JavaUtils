@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NativeReflectionUtils extends EdebeUtilsNative {
+public class NativeReflectionUtils extends JavaUtilsNative {
     public static native Class<?> defineClass(String name, ClassLoader loader, byte[] data, int offset, int length);
 
     public static native Class<?> findClass(String name);
