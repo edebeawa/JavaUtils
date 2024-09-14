@@ -33,7 +33,7 @@ public enum MethodAccessFlag implements AccessFlag {
         return name;
     }
 
-    private static final Map<Integer, MethodAccessFlag> MAP = newMap(MethodAccessFlag.values());
+    private static final Map<Integer, MethodAccessFlag> MAP = AccessFlag.newMap(MethodAccessFlag.values());
 
     public static int serialize(List<MethodAccessFlag> list) {
         return AccessFlag.serialize(list);
