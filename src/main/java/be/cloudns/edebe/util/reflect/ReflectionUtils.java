@@ -5,6 +5,7 @@ import be.cloudns.edebe.util.base.ThrowableUtils;
 import be.cloudns.edebe.util.misc.UnsafeUtils;
 import be.cloudns.edebe.util.wrapper.AccessibleObjectWrapper;
 import be.cloudns.edebe.util.wrapper.ClassWrapper;
+import be.cloudns.edebe.util.wrapper.ConstructorWrapper;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Nullable;
 
@@ -125,23 +126,27 @@ public class ReflectionUtils {
 
     public static Enum<?>[] getEnumValues(Class<?> type) throws ReflectiveOperationException {
         return ClassWrapper.wrap(type)
-                .getDeclaredMethodExactMatch("values")
+                .getDeclaredMethod("values")
                 .setAccessible(true)
                 .setType(Enum[].class)
                 .invokeStatic();
     }
 
-    public static <T extends Enum<T>> T newEnum(Class<T> type, String name, Object... arguments) throws ReflectiveOperationException {
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<T>> ConstructorWrapper<T> getEnumConstructor(ClassWrapper<T> wrapper, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        List<Class<?>> list = new ArrayList<>();
+        list.add(String.class);
+        list.add(int.class);
+        list.addAll(Arrays.asList(parameterTypes));
+        return (ConstructorWrapper<T>) wrapper.getDeclaredConstructorNoRestrict(list.toArray(Class[]::new)).setAccessibleNoRestrict(true);
+    }
+
+    public static <T extends Enum<T>> T newEnumInstance(ConstructorWrapper<T> wrapper, String name, Object... arguments) throws ReflectiveOperationException {
         List<Object> list = new ArrayList<>();
         list.add(name);
-        list.add(getEnumValues(type).length);
+        list.add(getEnumValues(wrapper.getObject().getDeclaringClass()).length);
         list.addAll(Arrays.asList(arguments));
-        Object[] objects = list.toArray();
-        return ClassWrapper.wrap(type)
-                .getDeclaredConstructorNoRestrictFuzzyMatch(ClassUtils.getClass(objects))
-                .setAccessibleNoRestrict(true)
-                .setType(type)
-                .newInstanceNoRestrict(objects);
+        return wrapper.newInstanceNoRestrict(list.toArray());
     }
 
     public static boolean isMethodHandleClass(Class<?> clazz) throws ReflectiveOperationException {

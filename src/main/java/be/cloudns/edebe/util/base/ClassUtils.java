@@ -15,14 +15,6 @@ public class ClassUtils {
         return Arrays.stream(objects).map(Object::getClass).toArray(Class[]::new);
     }
 
-    public static boolean equals(Object[] array0, Object[] array1, boolean fuzzy) {
-        return ArrayUtils.equals(
-                Arrays.stream(array0).map(Object::getClass).toArray(Class[]::new),
-                Arrays.stream(array1).map(Object::getClass).toArray(Class[]::new),
-                fuzzy
-        );
-    }
-
     public static String toBinaryName(String classname) {
         return classname.replace('/', '.');
     }

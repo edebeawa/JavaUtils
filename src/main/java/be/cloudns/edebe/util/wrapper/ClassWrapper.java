@@ -154,19 +154,19 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         return MethodWrapper.wrapAll(getMethods(false, true));
     }
 
-    private static Method searchMethod(Method[] methods, String name, Class<?>[] parameterTypes, boolean fuzzy) throws ReflectiveOperationException {
+    private static Method searchMethod(Method[] methods, String name, Class<?>[] parameterTypes) throws ReflectiveOperationException {
         Method res = null;
         for (Method method : methods) {
             if (method.getName().equals(name) &&
-                    ArrayUtils.equals(parameterTypes, getExecutableSharedParameterTypes(method), fuzzy) &&
+                    ArrayUtils.equals(parameterTypes, getExecutableSharedParameterTypes(method)) &&
                     (res == null || (res.getReturnType() != method.getReturnType() && res.getReturnType().isAssignableFrom(method.getReturnType())))
             ) res = method;
         }
         return res;
     }
 
-    private Method searchMethod(String name, Class<?>[] parameterTypes, boolean restrict, boolean publicOnly, boolean fuzzy) throws ReflectiveOperationException {
-        Method method = searchMethod(getMethods(restrict, publicOnly), name, parameterTypes, fuzzy);
+    private Method searchMethod(String name, Class<?>[] parameterTypes, boolean restrict, boolean publicOnly) throws ReflectiveOperationException {
+        Method method = searchMethod(getMethods(restrict, publicOnly), name, parameterTypes);
         if (method != null) {
             return method;
         } else {
@@ -174,36 +174,20 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         }
     }
 
-    public MethodWrapper<?> getDeclaredMethodExactMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, false, false));
+    public MethodWrapper<?> getDeclaredMethod(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, false));
     }
 
-    public MethodWrapper<?> getMethodExactMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, true, false));
+    public MethodWrapper<?> getMethod(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, true));
     }
 
-    public MethodWrapper<?> getDeclaredMethodNoRestrictExactMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, false, false));
+    public MethodWrapper<?> getDeclaredMethodNoRestrict(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, false));
     }
 
-    public MethodWrapper<?> getMethodNoRestrictExactMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, true, false));
-    }
-
-    public MethodWrapper<?> getDeclaredMethodFuzzyMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, false, true));
-    }
-
-    public MethodWrapper<?> getMethodFuzzyMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, true, true, true));
-    }
-
-    public MethodWrapper<?> getDeclaredMethodNoRestrictFuzzyMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, false, true));
-    }
-
-    public MethodWrapper<?> getMethodNoRestrictFuzzyMatch(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, true, true));
+    public MethodWrapper<?> getMethodNoRestrict(String name, Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return MethodWrapper.wrap(searchMethod(name, parameterTypes, false, true));
     }
 
     private Constructor<?>[] getConstructors(boolean restrict, boolean publicOnly) throws ReflectiveOperationException {
@@ -234,17 +218,17 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
         return (ConstructorWrapper<T>[]) ConstructorWrapper.wrapAll(getConstructors(false, true));
     }
 
-    private static Constructor<?> searchConstructor(Constructor<?>[] constructors, Class<?>[] parameterTypes, boolean fuzzy) throws ReflectiveOperationException {
+    private static Constructor<?> searchConstructor(Constructor<?>[] constructors, Class<?>[] parameterTypes) throws ReflectiveOperationException {
         for (Constructor<?> constructor : constructors) {
-            if (ArrayUtils.equals(parameterTypes, getExecutableSharedParameterTypes(constructor), fuzzy)) {
+            if (ArrayUtils.equals(parameterTypes, getExecutableSharedParameterTypes(constructor))) {
                 return constructor;
             }
         }
         return null;
     }
 
-    private Constructor<?> searchConstructor(Class<?>[] parameterTypes, boolean restrict, boolean publicOnly, boolean fuzzy) throws ReflectiveOperationException {
-        Constructor<?> constructor = searchConstructor(getConstructors(restrict, publicOnly), parameterTypes, fuzzy);
+    private Constructor<?> searchConstructor(Class<?>[] parameterTypes, boolean restrict, boolean publicOnly) throws ReflectiveOperationException {
+        Constructor<?> constructor = searchConstructor(getConstructors(restrict, publicOnly), parameterTypes);
         if (constructor != null) {
             return constructor;
         } else {
@@ -253,43 +237,23 @@ public class ClassWrapper<T> extends AbstractWrapper<Class<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getDeclaredConstructorExactMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, false, false));
+    public ConstructorWrapper<T> getDeclaredConstructor(Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, false));
     }
 
     @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getConstructorExactMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, true, false));
+    public ConstructorWrapper<T> getConstructor(Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, true));
     }
 
     @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getDeclaredConstructorNoRestrictExactMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, false, false));
+    public ConstructorWrapper<T> getDeclaredConstructorNoRestrict(Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, false));
     }
 
     @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getConstructorNoRestrictExactMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, true, false));
-    }
-
-    @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getDeclaredConstructorFuzzyMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, false, true));
-    }
-
-    @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getConstructorFuzzyMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, true, true, true));
-    }
-
-    @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getDeclaredConstructorNoRestrictFuzzyMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, false, true));
-    }
-
-    @SuppressWarnings("unchecked")
-    public ConstructorWrapper<T> getConstructorNoRestrictFuzzyMatch(Class<?>... parameterTypes) throws ReflectiveOperationException {
-        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, true, true));
+    public ConstructorWrapper<T> getConstructorNoRestrict(Class<?>... parameterTypes) throws ReflectiveOperationException {
+        return (ConstructorWrapper<T>) ConstructorWrapper.wrap(searchConstructor(parameterTypes, false, true));
     }
 
     private Class<?>[] getClasses(boolean restrict, boolean publicOnly) throws ReflectiveOperationException {

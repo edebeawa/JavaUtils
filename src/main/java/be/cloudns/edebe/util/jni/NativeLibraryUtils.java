@@ -28,13 +28,13 @@ public class NativeLibraryUtils extends JavaUtilsNative {
                     .getDeclaredFieldNoRestrict("libraries")
                     .setAccessibleNoRestrict(true);
             NATIVE_LIBRARIES_LOAD_LIBRARY_METHOD = ClassWrapper.wrap(NATIVE_LIBRARIES_CLASS)
-                    .getDeclaredMethodNoRestrictExactMatch("loadLibrary", Class.class, File.class)
+                    .getDeclaredMethodNoRestrict("loadLibrary", Class.class, File.class)
                     .setAccessibleNoRestrict(true);
             CLASS_LOADER_LIBRARIES_FIELD = ClassWrapper.wrap(ClassLoader.class)
                     .getDeclaredFieldNoRestrict("libraries")
                     .setAccessibleNoRestrict(true);
             NATIVE_LIBRARY_IMPL_UNLOADER_METHOD = ClassWrapper.wrap(Class.forName("jdk.internal.loader.NativeLibraries$NativeLibraryImpl"))
-                    .getDeclaredMethodNoRestrictExactMatch("unloader")
+                    .getDeclaredMethodNoRestrict("unloader")
                     .setAccessibleNoRestrict(true);
         }
         catch (ReflectiveOperationException e) {
