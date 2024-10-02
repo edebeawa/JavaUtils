@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>be.cloudns.edebe.util</groupId>
+  <artifactId>JavaUtils</artifactId>
+  <version>16-SNAPSHOT</version>
+  <versioning>
+    <lastUpdated>20241002133540</lastUpdated>
+  </versioning>
+</metadata>
