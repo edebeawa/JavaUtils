@@ -1,12 +1,13 @@
 package be.cloudns.edebe.util.io;
 
-import lombok.experimental.UtilityClass;
 import be.cloudns.edebe.util.base.StringUtils;
+import lombok.experimental.UtilityClass;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +17,14 @@ import java.util.zip.ZipFile;
 
 @UtilityClass
 public class FileUtils {
+    public static Path createDirectory(Path dir) throws IOException {
+        File file = dir.toFile();
+        if (file.exists() || file.mkdir())
+            return dir;
+        else
+            throw new FileSystemException(dir.toString(), null, "Unable to create directory");
+    }
+
     public static byte[] getByteArray(File file) throws IOException {
         try (FileInputStream stream = new FileInputStream(file)) {
             return StreamUtils.toByteArray(stream);
