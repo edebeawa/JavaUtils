@@ -1,8 +1,8 @@
 package be.cloudns.edebe.util.base;
 
 import be.cloudns.edebe.util.io.ClassResourceContext;
-import lombok.experimental.UtilityClass;
 import be.cloudns.edebe.util.io.PathUtils;
+import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -31,12 +31,24 @@ public class ClassUtils {
         return classname.replace('.', '/');
     }
 
+    public static String getInternalName(Class<?> clazz) {
+        return toInternalName(clazz.getName());
+    }
+
     public static String toClassName(String classpath) {
         return toBinaryName(classpath.substring(0, classpath.lastIndexOf(".")));
     }
 
+    public static String toClassPath(String classname) {
+        return toInternalName(classname) + ".class";
+    }
+
+    public static String toClassPath(Class<?> clazz) {
+        return toClassPath(clazz.getName());
+    }
+
     public static Path getPath(ClassResourceContext context, String classname, Charset charset) throws IOException {
-        return PathUtils.getPath(context.getResource(classname.replace('.', '/') + ".class"), charset);
+        return PathUtils.getPath(context.getResource(toClassPath(classname)), charset);
     }
 
     public static Path getPath(ClassLoader classloader, String classname, Charset charset) throws IOException {
