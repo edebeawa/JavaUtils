@@ -55,8 +55,10 @@ public abstract class AbstractBiMap<K, V> extends AbstractMap<K, V> implements B
     public V get(Object key) {
         if (inverseMap().containsValue(key))
             return currentMap().get(key);
-        else
+        else if (currentMap().containsKey(key))
             throw new ConcurrentModificationException();
+        else
+            return null;
     }
 
     @Nullable
