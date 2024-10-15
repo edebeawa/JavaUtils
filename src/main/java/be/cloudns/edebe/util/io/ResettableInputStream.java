@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Deprecated
 public class ResettableInputStream extends InputStream {
     private final ThrowableSupplier<InputStream, IOException> supplier;
     private InputStream stream;

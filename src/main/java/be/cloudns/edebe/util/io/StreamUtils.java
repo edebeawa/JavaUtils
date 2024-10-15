@@ -28,6 +28,10 @@ public class StreamUtils {
         }
     }
 
+    public static ByteArrayInputStream toByteArrayInputStream(InputStream stream) throws IOException {
+        return new ByteArrayInputStream(StreamUtils.toByteArray(stream));
+    }
+
     public static String toString(InputStream stream) throws IOException {
         return StreamUtils.toByteArrayOutputStream(stream).toString();
     }
@@ -59,10 +63,10 @@ public class StreamUtils {
         }
     }
 
-    public static void readAllEntry(ZipInputStream stream, ThrowableBiConsumer<ZipEntry, ResettableInputStream, IOException> consumer) throws IOException {
+    public static void readAllEntry(ZipInputStream stream, ThrowableBiConsumer<ZipEntry, InputStream, IOException> consumer) throws IOException {
         ZipEntry entry;
         while ((entry = stream.getNextEntry()) != null)
-            consumer.accept(entry, new ResettableInputStream(stream));
+            consumer.accept(entry, toByteArrayInputStream(stream));
     }
 
     public static void writeAllEntry(ZipOutputStream stream, Map<ZipEntry, InputStream> map) throws IOException {

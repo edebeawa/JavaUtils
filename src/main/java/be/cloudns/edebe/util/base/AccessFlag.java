@@ -23,11 +23,13 @@ interface AccessFlag {
 
     static <T extends AccessFlag> List<T> deserialize(int access, Map<Integer, T> map) {
         List<T> list = new ArrayList<>();
-        for (int flag : map.keySet())
+        for (Map.Entry<Integer, T> entry : map.entrySet()) {
+            int flag = entry.getKey();
             if (access >= flag) {
-                list.add(map.get(flag));
-                access-= flag;
+                list.add(entry.getValue());
+                access -= flag;
             }
+        }
         return list;
     }
 }
