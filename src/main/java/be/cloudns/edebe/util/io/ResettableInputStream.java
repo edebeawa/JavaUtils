@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@Deprecated(forRemoval = true)
 public class ResettableInputStream extends InputStream {
     private final ThrowableSupplier<InputStream, IOException> supplier;
     private InputStream stream;

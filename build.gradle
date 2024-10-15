@@ -3,14 +3,14 @@ plugins {
 }
 
 group 'be.cloudns.edebe.util'
-version '4.0.5'
+version '4.0.6'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'org.jetbrains:annotations:24.0.1'
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    compileOnly "org.jetbrains:annotations:${annotations_version}"
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
