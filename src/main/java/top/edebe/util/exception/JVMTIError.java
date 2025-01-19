@@ -1,0 +1,134 @@
+package top.edebe.util.exception;
+
+import lombok.Getter;
+
+@Getter
+public class JVMTIError extends Error {
+    private final Type type;
+
+    public JVMTIError(final int error) {
+        super();
+        this.type = Type.get(error);
+    }
+
+    @Override
+    public String getMessage() {
+        return this.type.name();
+    }
+
+    public enum Type {
+        NONE,//0
+        INVALID_THREAD,//10
+        INVALID_THREAD_GROUP,//11
+        INVALID_PRIORITY,//12
+        THREAD_NOT_SUSPENDED,//13
+        THREAD_SUSPENDED,//14
+        THREAD_NOT_ALIVE,//15
+        INVALID_OBJECT,//20
+        INVALID_CLASS,//21
+        CLASS_NOT_PREPARED,//22
+        INVALID_METHODID,//23
+        INVALID_LOCATION,//24
+        INVALID_FIELDID,//25
+        INVALID_MODULE,//26
+        NO_MORE_FRAMES,//31
+        OPAQUE_FRAME,//32
+        TYPE_MISMATCH,//34
+        INVALID_SLOT,//35
+        DUPLICATE,//40
+        NOT_FOUND,//41
+        INVALID_MONITOR,//50
+        NOT_MONITOR_OWNER,//51
+        INTERRUPT,//52
+        INVALID_CLASS_FORMAT,//60
+        CIRCULAR_CLASS_DEFINITION,//61
+        FAILS_VERIFICATION,//62
+        UNSUPPORTED_REDEFINITION_METHOD_ADDED,//63
+        UNSUPPORTED_REDEFINITION_SCHEMA_CHANGED,//64
+        INVALID_TYPESTATE,//65
+        UNSUPPORTED_REDEFINITION_HIERARCHY_CHANGED,//66
+        UNSUPPORTED_REDEFINITION_METHOD_DELETED,//67
+        UNSUPPORTED_VERSION,//68
+        NAMES_DONT_MATCH,//69
+        UNSUPPORTED_REDEFINITION_CLASS_MODIFIERS_CHANGED,//70
+        UNSUPPORTED_REDEFINITION_METHOD_MODIFIERS_CHANGED,//71
+        UNSUPPORTED_REDEFINITION_CLASS_ATTRIBUTE_CHANGED,//72
+        UNMODIFIABLE_CLASS,//79
+        UNMODIFIABLE_MODULE,//80
+        NOT_AVAILABLE,//98
+        MUST_POSSESS_CAPABILITY,//99
+        NULL_POINTER,//100
+        ABSENT_INFORMATION,//101
+        INVALID_EVENT_TYPE,//102
+        ILLEGAL_ARGUMENT,//103
+        NATIVE_METHOD,//104
+        CLASS_LOADER_UNSUPPORTED,//106
+        OUT_OF_MEMORY,//110
+        ACCESS_DENIED,//111
+        WRONG_PHASE,//112
+        INTERNAL,//113
+        UNATTACHED_THREAD,//115
+        INVALID_ENVIRONMENT;//116
+
+        private static final Type[] TYPES = new Type[117];
+
+        static {
+            TYPES[0] = NONE;
+            TYPES[10] = INVALID_THREAD;
+            TYPES[11] = INVALID_THREAD_GROUP;
+            TYPES[12] = INVALID_PRIORITY;
+            TYPES[13] = THREAD_NOT_SUSPENDED;
+            TYPES[14] = THREAD_SUSPENDED;
+            TYPES[15] = THREAD_NOT_ALIVE;
+            TYPES[20] = INVALID_OBJECT;
+            TYPES[21] = INVALID_CLASS;
+            TYPES[22] = CLASS_NOT_PREPARED;
+            TYPES[23] = INVALID_METHODID;
+            TYPES[24] = INVALID_LOCATION;
+            TYPES[25] = INVALID_FIELDID;
+            TYPES[26] = INVALID_MODULE;
+            TYPES[31] = NO_MORE_FRAMES;
+            TYPES[32] = OPAQUE_FRAME;
+            TYPES[34] = TYPE_MISMATCH;
+            TYPES[35] = INVALID_SLOT;
+            TYPES[40] = DUPLICATE;
+            TYPES[41] = NOT_FOUND;
+            TYPES[50] = INVALID_MONITOR;
+            TYPES[51] = NOT_MONITOR_OWNER;
+            TYPES[52] = INTERRUPT;
+            TYPES[60] = INVALID_CLASS_FORMAT;
+            TYPES[61] = CIRCULAR_CLASS_DEFINITION;
+            TYPES[62] = FAILS_VERIFICATION;
+            TYPES[63] = UNSUPPORTED_REDEFINITION_METHOD_ADDED;
+            TYPES[64] = UNSUPPORTED_REDEFINITION_SCHEMA_CHANGED;
+            TYPES[65] = INVALID_TYPESTATE;
+            TYPES[66] = UNSUPPORTED_REDEFINITION_HIERARCHY_CHANGED;
+            TYPES[67] = UNSUPPORTED_REDEFINITION_METHOD_DELETED;
+            TYPES[68] = UNSUPPORTED_VERSION;
+            TYPES[69] = NAMES_DONT_MATCH;
+            TYPES[70] = UNSUPPORTED_REDEFINITION_CLASS_MODIFIERS_CHANGED;
+            TYPES[71] = UNSUPPORTED_REDEFINITION_METHOD_MODIFIERS_CHANGED;
+            TYPES[72] = UNSUPPORTED_REDEFINITION_CLASS_ATTRIBUTE_CHANGED;
+            TYPES[79] = UNMODIFIABLE_CLASS;
+            TYPES[80] = UNMODIFIABLE_MODULE;
+            TYPES[98] = NOT_AVAILABLE;
+            TYPES[99] = MUST_POSSESS_CAPABILITY;
+            TYPES[100] = NULL_POINTER;
+            TYPES[101] = ABSENT_INFORMATION;
+            TYPES[102] = INVALID_EVENT_TYPE;
+            TYPES[103] = ILLEGAL_ARGUMENT;
+            TYPES[104] = NATIVE_METHOD;
+            TYPES[106] = CLASS_LOADER_UNSUPPORTED;
+            TYPES[110] = OUT_OF_MEMORY;
+            TYPES[111] = ACCESS_DENIED;
+            TYPES[112] = WRONG_PHASE;
+            TYPES[113] = INTERNAL;
+            TYPES[115] = UNATTACHED_THREAD;
+            TYPES[116] = INVALID_ENVIRONMENT;
+        }
+
+        public static Type get(final int error) {
+            return TYPES[error];
+        }
+    }
+}
