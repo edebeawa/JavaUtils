@@ -1,10 +1,15 @@
-package be.cloudns.edebe.util.jni;
+package top.edebe.util.jni;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@UtilityClass
 public class NativeProcessUtils extends JavaUtilsNative {
+    static {
+        NativeProcessUtils.registerNatives();
+    }
+
+    private static native int registerNatives();
+
     public static native void writeProcessMemory(long pid, long address, long value);
 
     public static native long readProcessMemory(long pid, long address);
