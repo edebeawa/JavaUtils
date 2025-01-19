@@ -31,7 +31,7 @@ public enum ClassAccessFlag implements AccessFlag {
         return this.name;
     }
 
-    private static final Map<Integer, ClassAccessFlag> MAP = newMap(ClassAccessFlag.values());
+    private static final Map<Integer, ClassAccessFlag> MAP = AccessFlag.newMap(ClassAccessFlag.values());
 
     public static int serialize(final @NotNull List<ClassAccessFlag> list) {
         return AccessFlag.serialize(list);
